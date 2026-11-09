@@ -1,3 +1,13 @@
 dist/
+dist-ssr/
+server-dist/
 node_modules/
+data/
+.env
+.env.local
+.env.*.local
+test-results/
+playwright-report/
+*.db
+*.db-*
 !.env.example

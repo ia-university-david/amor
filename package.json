@@ -1,33 +1,65 @@
 {
   "name": "amor-toxico",
   "private": true,
-  "version": "0.1.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "dev": "concurrently -k -n api,web -c magenta,cyan \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:web": "vite",
+    "dev:api": "tsx watch --clear-screen=false server/index.ts",
+    "build": "npm run typecheck && vite build && npm run prerender && npm run build:server",
+    "build:server": "esbuild server/index.ts --bundle --platform=node --format=esm --target=node22 --packages=external --outfile=server-dist/index.js --log-level=warning",
+    "prerender": "vite build --ssr src/entry-server.tsx --outDir dist-ssr --logLevel warn && node scripts/prerender.mjs",
+    "start": "NODE_ENV=production node server-dist/index.js",
     "preview": "vite preview",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit",
-    "icons": "node scripts/generate-icons.mjs"
+    "test:watch": "vitest",
+    "e2e": "playwright test",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.server.json",
+    "icons": "node scripts/generate-icons.mjs",
+    "vapid": "node scripts/generate-vapid.mjs",
+    "secrets": "node scripts/generate-secrets.mjs",
+    "role": "tsx scripts/grant-role.ts"
   },
   "dependencies": {
+    "@hono/node-server": "^2.1.6",
+    "@hono/zod-validator": "^0.9.1",
+    "better-sqlite3": "^13.0.3",
+    "hono": "^4.13.17",
+    "jose": "^6.2.16",
+    "kysely": "^0.29.8",
+    "nodemailer": "^10.4.0",
+    "pg": "^8.23.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.30.6"
+    "react-router-dom": "^6.30.6",
+    "stripe": "^23.1.0",
+    "web-push": "^4.0.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.0",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
+    "@types/better-sqlite3": "^9.6.0",
     "@types/node": "^22.20.5",
+    "@types/nodemailer": "^8.0.2",
+    "@types/pg": "^8.23.1",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
+    "@types/web-push": "^3.6.4",
     "@vitejs/plugin-react": "^4.7.0",
+    "concurrently": "^10.0.7",
+    "esbuild": "^0.28.2",
     "fake-indexeddb": "^6.2.8",
     "jsdom": "^25.0.1",
     "sharp": "^0.35.5",
+    "tsx": "^4.23.15",
     "typescript": "^5.9.3",
     "vite": "^5.4.21",
     "vitest": "^2.1.9"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

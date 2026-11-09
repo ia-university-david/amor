@@ -39,8 +39,19 @@ function serviceWorkerPlugin(): Plugin {
 
 export default defineConfig({
   plugins: [react(), serviceWorkerPlugin()],
-  server: { port: 5173, host: true },
-  preview: { port: 4173, host: true },
+  server: {
+    port: 5173,
+    host: true,
+    proxy: {
+      '/api': { target: `http://localhost:${process.env.PORT ?? 8787}`, changeOrigin: false },
+      '/sitemap.xml': { target: `http://localhost:${process.env.PORT ?? 8787}` },
+    },
+  },
+  preview: {
+    port: 4173,
+    host: true,
+    proxy: { '/api': { target: `http://localhost:${process.env.PORT ?? 8787}` } },
+  },
   test: {
     environment: 'node',
     setupFiles: ['./tests/setup.ts'],
