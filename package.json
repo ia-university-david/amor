@@ -13,6 +13,7 @@
     "start": "NODE_ENV=production node server-dist/index.js",
     "preview": "vite preview",
     "test": "vitest run",
+    "test:pg": "TEST_PG_URL=${TEST_PG_URL:-postgres://amor:amor@localhost/amor} vitest run tests/server",
     "test:watch": "vitest",
     "e2e": "playwright test",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.server.json",

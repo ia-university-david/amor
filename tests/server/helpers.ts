@@ -19,8 +19,26 @@ export interface TestClient {
   json<T = Record<string, unknown>>(path: string, init?: { method?: string; json?: unknown }): Promise<{ status: number; body: T }>;
 }
 
+/**
+ * With TEST_PG_URL (e.g. postgres://amor:amor@localhost/amor) every test app
+ * gets its own fresh Postgres database, so the suite also validates Postgres.
+ */
+async function testDatabaseUrl(): Promise<string> {
+  const admin = process.env.TEST_PG_URL;
+  if (!admin) return 'sqlite::memory:';
+  const { default: pg } = await import('pg');
+  const name = `amor_test_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+  const client = new pg.Client({ connectionString: admin });
+  await client.connect();
+  await client.query(`CREATE DATABASE ${name}`);
+  await client.end();
+  const url = new URL(admin);
+  url.pathname = `/${name}`;
+  return url.toString();
+}
+
 export async function makeTestApp(env: Record<string, string> = {}, overrides: DepOverrides = {}): Promise<TestApp> {
-  const config = loadConfig({ NODE_ENV: 'test', DATABASE_URL: 'sqlite::memory:', EMAIL_TRANSPORT: 'memory', APP_URL: ORIGIN, ...env });
+  const config = loadConfig({ NODE_ENV: 'test', DATABASE_URL: await testDatabaseUrl(), EMAIL_TRANSPORT: 'memory', APP_URL: ORIGIN, ...env });
   const mail = new MemoryTransport();
   const deps = await buildDeps(config, { log: silentLogger, transport: mail, llm: null, ...overrides });
   const app = createApp(deps);

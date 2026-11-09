@@ -1,0 +1,36 @@
+# Producción en un servidor propio (VPS): app + Postgres.
+#   1. cp .env.example .env  y completa al menos APP_URL, DATA_ENCRYPTION_KEY y POSTGRES_PASSWORD
+#   2. docker compose up -d --build
+# Para HTTPS, pon delante nginx (deploy/nginx.conf) o Caddy. Ver DEPLOY.md.
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      TRUST_PROXY: "true"
+      DATABASE_URL: postgres://amor:${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD en .env}@db:5432/amor
+    ports:
+      - "127.0.0.1:8787:8787"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: amor
+      POSTGRES_DB: amor
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD en .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U amor -d amor"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
