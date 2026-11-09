@@ -1,3 +1,4 @@
+import { Seo } from '../../components/Seo';
 import { Icon } from '../../components/Icon';
 import { LeadForm } from '../../components/LeadForm';
 import { LINKS } from '../../content/links';
@@ -5,6 +6,7 @@ import { LINKS } from '../../content/links';
 export function Contact() {
   return (
     <div className="container narrow section">
+      <Seo title="Contacto" description="Escríbenos para preguntas sobre la app Amor Tóxico, el libro o colaboraciones." path="/contacto" />
       <span className="eyebrow">Contacto</span>
       <h1>Escríbenos</h1>
       <p className="muted">

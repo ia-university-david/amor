@@ -1,3 +1,4 @@
+import { Seo } from '../../components/Seo';
 import { useLocation } from 'react-router-dom';
 import { Icon } from '../../components/Icon';
 import { EmptyState, PageHeader, formatDate } from '../../components/ui';
@@ -9,6 +10,7 @@ export default function Biblioteca() {
   const inApp = useLocation().pathname.startsWith('/app');
   return (
     <div className={inApp ? '' : 'container section'}>
+      <Seo title="Biblioteca científica" description="Las fuentes en las que se apoya el contenido de Amor Tóxico, con su nivel de evidencia y sus limitaciones." path="/biblioteca" noindex={inApp} />
       <PageHeader
         eyebrow="Biblioteca"
         title="Referencias y fuentes"

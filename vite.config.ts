@@ -19,6 +19,7 @@ function serviceWorkerPlugin(): Plugin {
       const built = Object.keys(bundle).filter((f) => !f.endsWith('.map'));
       const staticFiles = [
         '/',
+        '/app.html',
         '/offline.html',
         '/manifest.webmanifest',
         '/logo.svg',

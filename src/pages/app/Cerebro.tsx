@@ -1,3 +1,4 @@
+import { Seo } from '../../components/Seo';
 import { Link, useLocation } from 'react-router-dom';
 import { Icon } from '../../components/Icon';
 import { Notice, PageHeader } from '../../components/ui';
@@ -18,6 +19,12 @@ export default function Cerebro() {
   const inApp = base.startsWith('/app');
   return (
     <div className={inApp ? '' : 'container section'}>
+      <Seo
+        title="Tu cerebro después de una ruptura"
+        description="Quince temas breves para entender por qué una ruptura se siente tan intensa: apego, recompensa, rumiación y más, con ejemplos cotidianos."
+        path="/cerebro"
+        noindex={inApp}
+      />
       <PageHeader
         eyebrow="Pilar 2 · Entender por qué mi cerebro sigue buscando a esa persona"
         title="Tu cerebro después de una ruptura"

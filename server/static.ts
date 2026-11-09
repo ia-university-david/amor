@@ -70,7 +70,7 @@ export function mountStatic(app: Hono<AppEnv>, dir: string) {
     const isAsset = path.startsWith('assets/');
     if (!file) {
       if (isAsset || extname(path)) return c.text('No encontrado', 404);
-      file = join(root, 'index.html');
+      file = (await fileAt(join(root, 'app.html'))) ?? join(root, 'index.html');
     }
     const body = await readFile(file);
     const type = TYPES[extname(file)] ?? 'application/octet-stream';

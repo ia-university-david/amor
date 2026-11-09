@@ -1,3 +1,4 @@
+import { Seo } from '../../components/Seo';
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Icon } from '../../components/Icon';
@@ -38,6 +39,7 @@ export default function CerebroTema() {
 
   return (
     <article className={inApp ? 'container narrow' : 'container narrow section'} style={inApp ? { padding: 0 } : undefined}>
+      <Seo title={topic.title} description={topic.summary} path={`/cerebro/${topic.id}`} type="article" noindex={inApp} />
       <PageHeader back={base} eyebrow={`Tema ${topic.n} de ${BRAIN_TOPICS.length}`} title={topic.title} subtitle={topic.summary} />
       {topic.body.map((p, i) => (
         <p key={i} style={{ fontSize: '1.05rem' }}>

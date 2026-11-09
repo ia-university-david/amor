@@ -1,9 +1,19 @@
-# Netlify / Cloudflare Pages style rules.
-# Preserve the URLs of the previous amortoxico.com site.
-/vsl              /test            301
-/vsl/             /test            301
-/blog/            /blog            301
-/guia-72-horas/   /guia-72-horas   301
+# Netlify / Cloudflare Pages style rules (static hosting without the API server).
+# Preserve the URLs of the previous amortoxico.com site. Keep in sync with server/static.ts.
+/vsl                        /test             301
+/vsl/                       /test             301
+/inicio                     /                 301
+/home                       /                 301
+/articulos                  /blog             301
+/articulos/                 /blog             301
+/guia                       /guia-72-horas    301
+/guia-72h                   /guia-72-horas    301
+/test-amor-toxico           /test             301
+/contact                    /contacto         301
+/privacy                    /privacidad       301
+/politica-de-privacidad     /privacidad       301
+/blog/                      /blog             301
+/guia-72-horas/             /guia-72-horas    301
 
-# Single-page app fallback (must stay last).
-/*                /index.html      200
+# Single-page app fallback (must stay last). Prerendered pages are served as files first.
+/*                          /app.html         200

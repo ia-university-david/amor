@@ -1,3 +1,4 @@
+import { Seo } from '../../components/Seo';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChoiceList, Progress } from '../../components/ui';
@@ -20,6 +21,7 @@ export function TestPage() {
   if (index === -1) {
     return (
       <div className="container narrow section flow">
+      <Seo title="¿Tienes un amor tóxico? Test de orientación" description="Siete preguntas para reflexionar sobre cómo te sientes en tu relación. No es un diagnóstico; es un punto de partida para entenderte." path="/test" />
         <span className="eyebrow">Test de orientación</span>
         <h1>¿Tienes un amor tóxico?</h1>
         <p className="muted" style={{ fontSize: '1.1rem' }}>

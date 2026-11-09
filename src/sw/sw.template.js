@@ -6,7 +6,7 @@ const PRECACHE = 'amor-precache-' + VERSION;
 const RUNTIME = 'amor-runtime-v1';
 const PRECACHE_URLS = __PRECACHE_LIST__;
 const OFFLINE_URL = '/offline.html';
-const SHELL_URL = '/';
+const SHELL_URL = '/app.html';
 
 // Never cache API calls or anything that might carry personal data.
 const NEVER_CACHE = [/^\/api\//, /\/auth\//, /\/leads?\b/, /\/assistant\b/];

@@ -7,6 +7,8 @@ import { AUTHOR, BOOK, LINKS } from '../../content/links';
 import { CENTRAL_PRINCIPLE } from '../../content/messages';
 import { PILLARS } from '../../content/program';
 import { useApp } from '../../state/AppContext';
+import { BOOK_LD, ORGANIZATION_LD, Seo, WEBSITE_LD, faqLd } from '../../components/Seo';
+import { ALWAYS_FREE } from '../../../shared/plans';
 
 function HeroArt() {
   return (
@@ -57,7 +59,8 @@ const TOOLS: { icon: IconName; title: string; text: string }[] = [
 const FAQ: { q: string; a: string }[] = [
   { q: '¿Esto es terapia?', a: 'No. Es una herramienta de acompañamiento y educación emocional. No hace diagnósticos ni reemplaza a un profesional de la salud mental. Si lo necesitas, te animamos a buscar ese apoyo.' },
   { q: '¿En cuántos días voy a superar mi ruptura?', a: 'No existe un calendario universal, y no vamos a prometerte uno. Cada proceso es distinto y no es una línea recta.' },
-  { q: '¿Quién lee lo que escribo?', a: 'Tu diario, tus mensajes sin enviar y tus registros se guardan cifrados en tu dispositivo. En esta versión no se envían a ningún servidor.' },
+  { q: '¿Quién lee lo que escribo?', a: 'Nadie más que tú. Tu diario, tus cartas sin enviar, tus reflexiones y tus conversaciones se guardan cifrados en tu dispositivo y nunca se sincronizan. Si creas una cuenta, solo se sincronizan tu progreso y tus ajustes, y solo si lo permites. También puedes guardar una copia cifrada que solo se abre con tu frase.' },
+  { q: '¿Necesito crear una cuenta?', a: 'No. Puedes usar la app como invitado y todo se queda en tu dispositivo. Una cuenta te permite sincronizar tu progreso entre dispositivos, participar en la comunidad anónima y conversar con el asistente de IA.' },
   { q: '¿El asistente es Laura Rojas?', a: 'No. El asistente es una inteligencia artificial de acompañamiento, claramente identificada como tal. No es Laura ni un terapeuta.' },
   { q: '¿Tengo que dejar de hablar con mi expareja?', a: 'No necesariamente. Tú decides qué tipo de contacto quieres sostener. Si tienen hijos, trabajo o asuntos legales en común, el contacto necesario nunca se considera un retroceso.' },
   { q: '¿Funciona sin conexión?', a: 'Sí. Puedes instalarla en tu teléfono y usar la pausa, tus herramientas y el contenido educativo sin internet.' },
@@ -68,6 +71,7 @@ export function Landing() {
   const startTo = settings.onboardingComplete ? '/app' : '/bienvenida';
   return (
     <>
+      <Seo path="/" jsonLd={[ORGANIZATION_LD, WEBSITE_LD, BOOK_LD, faqLd(FAQ)]} />
       <section className="hero">
         <div className="container hero-grid">
           <div className="fade-in">
@@ -305,9 +309,12 @@ export function Landing() {
           <div className="card tint-lavanda stack">
             <span className="eyebrow">Comunidad</span>
             <h2>No tienes que atravesarlo en soledad</h2>
-            <p>Únete al grupo de la comunidad y sigue el contenido de Amor Tóxico en redes.</p>
+            <p>Participa en la comunidad anónima y moderada de la app, únete al grupo de WhatsApp o sigue el contenido de Amor Tóxico en redes.</p>
             <div className="row">
-              <a className="btn btn-primary" href={LINKS.community} target="_blank" rel="noreferrer">
+              <Link className="btn btn-primary" to="/app/comunidad">
+                <Icon name="users" size={18} /> Comunidad anónima
+              </Link>
+              <a className="btn btn-outline" href={LINKS.community} target="_blank" rel="noreferrer">
                 <Icon name="message" size={18} /> Grupo de WhatsApp
               </a>
               <a className="btn btn-outline" href={LINKS.instagram} target="_blank" rel="noreferrer">
@@ -317,7 +324,9 @@ export function Landing() {
                 <Icon name="youtube" size={18} /> YouTube
               </a>
             </div>
-            <p className="small muted">Los grupos de la comunidad son espacios entre personas; no sustituyen la ayuda profesional.</p>
+            <p className="small muted">
+              Los espacios de la comunidad son entre personas y no sustituyen la ayuda profesional. <Link to="/comunidad/normas">Normas de la comunidad</Link>
+            </p>
           </div>
         </div>
       </section>
@@ -339,7 +348,17 @@ export function Landing() {
         <div className="container narrow" style={{ textAlign: 'center' }}>
           <span className="eyebrow">Planes</span>
           <h2>Planes y precios</h2>
-          <p className="muted">Los planes se mostrarán aquí cuando estén configurados. Mientras tanto, puedes usar la app sin coste.</p>
+          <p className="muted">Lo esencial para tu seguridad es gratis, siempre:</p>
+          <ul className="small" style={{ textAlign: 'left', display: 'inline-block', margin: '0 auto 1rem' }}>
+            {ALWAYS_FREE.map((f) => (
+              <li key={f}>{f}</li>
+            ))}
+          </ul>
+          <div>
+            <Link to="/planes" className="btn btn-outline">
+              Ver los planes
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -357,7 +376,7 @@ export function Landing() {
             <span className="eyebrow">Privacidad</span>
             <h2>Tus datos son tuyos</h2>
             <p className="muted">
-              Lo que escribes se guarda cifrado en tu dispositivo. Puedes exportarlo o borrarlo todo cuando quieras.
+              Lo que escribes se guarda cifrado en tu dispositivo y nunca se sincroniza. Puedes exportarlo o borrarlo todo cuando quieras.
             </p>
             <Link to="/privacidad" className="btn btn-outline">
               Leer cómo cuidamos tu privacidad
