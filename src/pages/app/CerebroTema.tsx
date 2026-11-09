@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Icon } from '../../components/Icon';
 import { EmptyState, Notice, PageHeader } from '../../components/ui';
-import { BRAIN_MODULE_NOTICE, BRAIN_TOPICS } from '../../content/brain';
+import { BRAIN_MODULE_NOTICE } from '../../content/brain';
 import { EVIDENCE_LABELS } from '../../content/library';
 import { useModuleProgress } from '../../lib/progress';
 import { useApp } from '../../state/AppContext';
-import { useBrainBase } from './Cerebro';
+import { useBrainBase, useBrainTopics } from './Cerebro';
 
 export default function CerebroTema() {
   const { id } = useParams();
@@ -14,6 +14,7 @@ export default function CerebroTema() {
   const inApp = base.startsWith('/app');
   const { library, settings } = useApp();
   const { markDone } = useModuleProgress();
+  const BRAIN_TOPICS = useBrainTopics();
   const idx = BRAIN_TOPICS.findIndex((t) => t.id === id);
   const topic = BRAIN_TOPICS[idx];
 

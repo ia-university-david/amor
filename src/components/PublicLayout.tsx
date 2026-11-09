@@ -5,8 +5,9 @@ import { Icon, Logo } from './Icon';
 import { InstallPrompt } from './InstallPrompt';
 
 export function PublicLayout() {
-  const { settings } = useApp();
+  const { settings, session } = useApp();
   const inApp = settings.onboardingComplete || settings.guest;
+  const signedIn = session?.mode === 'remote';
   return (
     <>
       <a href="#contenido" className="skip-link">
@@ -28,6 +29,11 @@ export function PublicLayout() {
             <NavLink to="/guia-72-horas" className="hide-sm">
               Guía 72 horas
             </NavLink>
+            {!signedIn && (
+              <NavLink to="/entrar" className="hide-sm">
+                Entrar
+              </NavLink>
+            )}
             <Link to={inApp ? '/app' : '/bienvenida'} className="btn btn-primary btn-sm" style={{ color: undefined }}>
               {inApp ? 'Mi espacio' : 'Comenzar'}
             </Link>
@@ -53,6 +59,8 @@ export function PublicLayout() {
               <Link to="/blog">Artículos</Link>
               <Link to="/test">¿Tienes un amor tóxico?</Link>
               <Link to="/guia-72-horas">Guía de las primeras 72 horas</Link>
+              <Link to="/planes">Planes</Link>
+              <Link to="/comunidad/normas">Normas de la comunidad</Link>
               <Link to="/privacidad">Privacidad</Link>
               <Link to="/contacto">Contacto</Link>
             </nav>

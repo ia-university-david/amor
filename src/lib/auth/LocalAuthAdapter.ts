@@ -2,6 +2,7 @@ import { constantTimeEqual, hashPassword, randomSalt } from '../crypto';
 import { data } from '../data';
 import {
   type AuthAdapter,
+  type AuthProviders,
   type AuthResult,
   type RegisterInput,
   type Session,
@@ -24,10 +25,35 @@ const ITERATIONS = 210_000;
  * DEVELOPMENT ONLY. Stores a PBKDF2 hash of the password on this device so the
  * onboarding flow can be exercised end to end. It is not an authentication
  * system: there is no server, no account recovery and no protection against
- * someone with access to this browser profile. Replace with a remote adapter.
+ * someone with access to this browser profile. Enabled with VITE_AUTH_MODE=local.
  */
+const UNAVAILABLE: AuthResult = { ok: false, error: 'No disponible en el modo local de desarrollo.' };
+
 export class LocalAuthAdapter implements AuthAdapter {
-  readonly providers = { magicLink: false, google: false, apple: false };
+  readonly mode = 'local-dev' as const;
+
+  async providers(): Promise<AuthProviders> {
+    return { password: true, magicLink: false, google: false, apple: false };
+  }
+
+  async consumeMagicLink() {
+    return UNAVAILABLE;
+  }
+  async verifyEmail() {
+    return UNAVAILABLE;
+  }
+  async requestVerification() {
+    return UNAVAILABLE;
+  }
+  async forgotPassword() {
+    return UNAVAILABLE;
+  }
+  async resetPassword() {
+    return UNAVAILABLE;
+  }
+  oauthUrl() {
+    return '#';
+  }
 
   async getSession(): Promise<Session | null> {
     return (await data().get<Session>('auth', 'session')) ?? null;
@@ -78,10 +104,9 @@ export class LocalAuthAdapter implements AuthAdapter {
   }
 
   private async startSession(email: string, name: string): Promise<AuthResult> {
-    const session: Session = { email, name, since: new Date().toISOString(), mode: 'local-dev' };
+    const session: Session = { email, name, since: new Date().toISOString(), mode: 'local-dev', adultConfirmed: true, emailVerified: false, role: 'user' };
     await data().put('auth', 'session', session);
     return { ok: true, session };
   }
 }
 
-export const auth: AuthAdapter = new LocalAuthAdapter();

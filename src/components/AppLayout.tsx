@@ -14,6 +14,8 @@ const MAIN_NAV: { to: string; label: string; icon: IconName; end?: boolean }[] =
 
 const SECONDARY_NAV: { to: string; label: string; icon: IconName }[] = [
   { to: '/app/asistente', label: 'Hablar con el asistente', icon: 'chat' },
+  { to: '/app/avances', label: 'Mis pequeños avances', icon: 'chart' },
+  { to: '/app/comunidad', label: 'Comunidad', icon: 'users' },
   { to: '/app/cerebro', label: 'Tu cerebro', icon: 'brain' },
   { to: '/app/limites', label: 'Contacto y límites', icon: 'shield' },
   { to: '/app/dificil', label: 'Hoy fue difícil', icon: 'cloud' },

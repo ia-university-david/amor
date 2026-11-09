@@ -49,6 +49,12 @@ const PATHS = {
   list: 'M8 6h12M8 12h12M8 18h12M4 6v.01M4 12v.01M4 18v.01',
   smile: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM8.5 14a4 4 0 0 0 7 0M9 9.5v.01M15 9.5v.01',
   eye: 'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
+  mail: 'M3 6h18v12H3zM3 7l9 6 9-6',
+  chart: 'M4 20V10M10 20V4M16 20v-7M22 20H2',
+  key: 'M14 10a4 4 0 1 0-3.5 4L9 15.5V18H6.5v2H4v-2.5l6.1-6.1M17 7v.01',
+  card: 'M3 6h18v12H3zM3 10h18M7 15h4',
+  flag: 'M5 21V4M5 4h11l-2 4 2 4H5',
+  cloudUp: 'M7 18a4.5 4.5 0 0 1-.6-9A6 6 0 0 1 18 9.5a4 4 0 0 1-.5 8.5M12 12v7M9 15l3-3 3 3',
 } as const;
 
 export type IconName = keyof typeof PATHS;

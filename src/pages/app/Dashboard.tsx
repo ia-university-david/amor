@@ -288,6 +288,31 @@ export default function Dashboard() {
         </span>
         <Icon name="next" className="muted" />
       </Link>
+
+      <div className="grid" style={{ ['--min' as string]: '220px' }}>
+        <Link to="/app/avances" className="card card-link row" style={{ flexWrap: 'nowrap' }}>
+          <span className="card-icon" style={{ marginBottom: 0 }}>
+            <Icon name="chart" />
+          </span>
+          <span>
+            <strong>Mis pequeños avances</strong>
+            <span className="muted small" style={{ display: 'block' }}>
+              Lo que has hecho por ti y tu reflexión semanal.
+            </span>
+          </span>
+        </Link>
+        <Link to="/app/comunidad" className="card card-link row" style={{ flexWrap: 'nowrap' }}>
+          <span className="card-icon" style={{ marginBottom: 0 }}>
+            <Icon name="users" />
+          </span>
+          <span>
+            <strong>Comunidad</strong>
+            <span className="muted small" style={{ display: 'block' }}>
+              Un espacio anónimo y moderado entre personas que te entienden.
+            </span>
+          </span>
+        </Link>
+      </div>
     </div>
   );
 }

@@ -9,6 +9,9 @@ import { TestPage } from './pages/public/TestPage';
 import { Privacy } from './pages/public/Privacy';
 import { Contact } from './pages/public/Contact';
 import { NotFound } from './pages/public/NotFound';
+import { Normas } from './pages/public/Normas';
+import { Planes, PlanesApp } from './pages/public/Planes';
+import { AccountReady, ConfirmAge, ConfirmEbook, DevMailbox, MagicLink, ResetPassword, SignIn, VerifyEmail } from './pages/public/Account';
 import { Logo } from './components/Icon';
 
 const Onboarding = lazy(() => import('./pages/app/Onboarding'));
@@ -26,6 +29,10 @@ const Cerebro = lazy(() => import('./pages/app/Cerebro'));
 const CerebroTema = lazy(() => import('./pages/app/CerebroTema'));
 const Biblioteca = lazy(() => import('./pages/app/Biblioteca'));
 const Admin = lazy(() => import('./pages/app/Admin'));
+const Avances = lazy(() => import('./pages/app/Avances'));
+const Comunidad = lazy(() => import('./pages/app/Comunidad'));
+const ComunidadSala = lazy(() => import('./pages/app/Comunidad').then((m) => ({ default: m.ComunidadSala })));
+const ComunidadMensaje = lazy(() => import('./pages/app/Comunidad').then((m) => ({ default: m.ComunidadMensaje })));
 
 function Loading() {
   return (
@@ -53,6 +60,17 @@ export function App() {
           <Route path="cerebro/:id" element={<CerebroTema />} />
           <Route path="biblioteca" element={<Biblioteca />} />
           <Route path="admin" element={<Admin />} />
+          <Route path="planes" element={<Planes />} />
+          <Route path="comunidad" element={<Navigate to="/app/comunidad" replace />} />
+          <Route path="comunidad/normas" element={<Normas />} />
+          <Route path="entrar" element={<SignIn />} />
+          <Route path="cuenta/listo" element={<AccountReady />} />
+          <Route path="cuenta/verificar" element={<VerifyEmail />} />
+          <Route path="cuenta/enlace" element={<MagicLink />} />
+          <Route path="cuenta/restablecer" element={<ResetPassword />} />
+          <Route path="cuenta/confirmar-edad" element={<ConfirmAge />} />
+          <Route path="confirmar-ebook" element={<ConfirmEbook />} />
+          <Route path="dev/correo" element={<DevMailbox />} />
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="bienvenida" element={<Onboarding />} />
@@ -84,6 +102,11 @@ export function App() {
           <Route path="cerebro" element={<Cerebro />} />
           <Route path="cerebro/:id" element={<CerebroTema />} />
           <Route path="biblioteca" element={<Biblioteca />} />
+          <Route path="avances" element={<Avances />} />
+          <Route path="planes" element={<PlanesApp />} />
+          <Route path="comunidad" element={<Comunidad />} />
+          <Route path="comunidad/mensaje/:id" element={<ComunidadMensaje />} />
+          <Route path="comunidad/:room" element={<ComunidadSala />} />
           <Route path="*" element={<Navigate to="/app" replace />} />
         </Route>
       </Routes>

@@ -1,11 +1,15 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { DEFAULT_LIBRARY, type LibraryEntry } from '../content/library';
-import { DEFAULT_MESSAGES, type ProductMessage } from '../content/messages';
-import { auth } from '../lib/auth/LocalAuthAdapter';
-import type { Session } from '../lib/auth/AuthAdapter';
+import type { LibraryEntry } from '../content/library';
+import type { ProductMessage } from '../content/messages';
+import { OFFLINE_CONFIG, api, getServerConfig, type ServerConfig } from '../lib/api';
+import { auth, type Session } from '../lib/auth';
+import { STATIC, cachedContent, fetchContent, toLibraryEntry, toMessage } from '../lib/content';
 import { data } from '../lib/data';
 import type { InitialPlan } from '../lib/plan';
 import { scheduleDailyReminder } from '../lib/notifications';
+import { flushPendingLeads } from '../lib/leads';
+import { syncEngine, type SyncStatus } from '../lib/sync';
+import type { LibraryData } from '../../shared/content';
 
 export interface Settings {
   theme: 'system' | 'light' | 'dark';
@@ -13,7 +17,8 @@ export interface Settings {
   onboardingComplete: boolean;
   guest: boolean;
   consents: { memory: boolean; aiSensitive: boolean };
-  notifications: { enabled: boolean; time: string };
+  /** `push` means reminders are delivered by the server (Web Push) instead of local timers. */
+  notifications: { enabled: boolean; time: string; push?: boolean };
   installDismissed: boolean;
 }
 
@@ -45,12 +50,15 @@ interface AppState {
   updateSettings: (patch: Partial<Settings>) => Promise<void>;
   session: Session | null;
   setSession: (s: Session | null) => void;
+  refreshSession: () => Promise<Session | null>;
+  signOut: () => Promise<void>;
+  setSyncConsent: (on: boolean) => Promise<boolean>;
+  syncStatus: SyncStatus;
+  server: ServerConfig;
   profile: Profile | null;
   updateProfile: (patch: Partial<Profile>) => Promise<Profile>;
   messages: ProductMessage[];
-  saveMessages: (m: ProductMessage[] | null) => Promise<void>;
   library: LibraryEntry[];
-  saveLibrary: (l: LibraryEntry[] | null) => Promise<void>;
   resetAll: () => Promise<void>;
 }
 
@@ -65,36 +73,75 @@ function applyTheme(settings: Settings) {
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#12131c' : '#FAFAFC');
 }
 
+function mergeSettings(s: Partial<Settings> | undefined): Settings {
+  return { ...DEFAULT_SETTINGS, ...s, consents: { ...DEFAULT_SETTINGS.consents, ...s?.consents }, notifications: { ...DEFAULT_SETTINGS.notifications, ...s?.notifications } };
+}
+
 export function AppProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [messages, setMessages] = useState<ProductMessage[]>(DEFAULT_MESSAGES);
-  const [library, setLibrary] = useState<LibraryEntry[]>(DEFAULT_LIBRARY);
+  const [messages, setMessages] = useState<ProductMessage[]>(STATIC.messages);
+  const [library, setLibrary] = useState<LibraryEntry[]>(STATIC.library);
+  const [server, setServer] = useState<ServerConfig>(OFFLINE_CONFIG);
+  const [syncStatus, setSyncStatus] = useState<SyncStatus>('off');
+
+  const loadLocal = useCallback(async () => {
+    const [s, p] = await Promise.all([data().get<Settings>('settings', 'app'), data().get<Profile>('profile', 'me')]);
+    if (s) setSettings(mergeSettings(s));
+    setProfile(p ?? null);
+  }, []);
 
   useEffect(() => {
     (async () => {
       try {
-        const [s, sess, p, m, l] = await Promise.all([
-          data().get<Settings>('settings', 'app'),
-          auth.getSession(),
-          data().get<Profile>('profile', 'me'),
-          data().get<ProductMessage[]>('content', 'messages'),
-          data().get<LibraryEntry[]>('content', 'library'),
-        ]);
-        if (s) setSettings({ ...DEFAULT_SETTINGS, ...s, consents: { ...DEFAULT_SETTINGS.consents, ...s.consents } });
-        setSession(sess);
-        setProfile(p ?? null);
-        if (m?.length) setMessages(m);
-        if (l?.length) setLibrary(l);
+        await loadLocal();
+        const [m, l] = await Promise.all([cachedContent<{ text: string }>('message'), cachedContent<LibraryData>('library')]);
+        if (m?.length) setMessages(m.map(toMessage));
+        if (l?.length) setLibrary(l.map(toLibraryEntry));
+        // Cached session first so the app opens instantly (and offline).
+        const cached = await data().get<Session>('auth', 'session');
+        if (cached) setSession(cached);
       } catch (err) {
         console.error('No se pudieron cargar los datos locales', err);
       } finally {
         setReady(true);
       }
+      const [cfg, sess] = await Promise.all([getServerConfig(), auth.getSession().catch(() => null)]);
+      setServer(cfg);
+      setSession(sess);
+      if (cfg.online) void flushPendingLeads();
+      const [m, l] = await Promise.all([fetchContent<{ text: string }>('message'), fetchContent<LibraryData>('library')]);
+      if (m?.length) setMessages(m.map(toMessage));
+      if (l?.length) setLibrary(l.map(toLibraryEntry));
     })();
-  }, []);
+  }, [loadLocal]);
+
+  useEffect(() => syncEngine.onStatus(setSyncStatus), []);
+
+  // Account sync runs only with the explicit consent stored on the account.
+  const syncOn = session?.mode === 'remote' && Boolean(session.consents?.sync);
+  useEffect(() => {
+    if (syncOn) void syncEngine.enable();
+    else syncEngine.disable();
+  }, [syncOn]);
+
+  useEffect(() => {
+    const onSynced = () => void loadLocal();
+    const onFocus = () => {
+      void syncEngine.syncNow();
+      void flushPendingLeads();
+    };
+    window.addEventListener('amor:synced', onSynced);
+    window.addEventListener('online', onFocus);
+    document.addEventListener('visibilitychange', onFocus);
+    return () => {
+      window.removeEventListener('amor:synced', onSynced);
+      window.removeEventListener('online', onFocus);
+      document.removeEventListener('visibilitychange', onFocus);
+    };
+  }, [loadLocal]);
 
   useEffect(() => {
     applyTheme(settings);
@@ -105,9 +152,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [settings]);
 
   useEffect(() => {
-    if (!settings.notifications.enabled) return;
-    return scheduleDailyReminder(settings.notifications.time, profile?.reminder || 'Un momento para ti: ¿cómo estás hoy?');
-  }, [settings.notifications.enabled, settings.notifications.time, profile?.reminder]);
+    if (!settings.notifications.enabled || settings.notifications.push) return;
+    return scheduleDailyReminder(settings.notifications.time, 'Un momento para ti: ¿cómo estás hoy?');
+  }, [settings.notifications.enabled, settings.notifications.time, settings.notifications.push]);
 
   const settingsRef = useRef(settings);
   settingsRef.current = settings;
@@ -130,27 +177,28 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return next;
   }, []);
 
-  const saveMessages = useCallback(async (m: ProductMessage[] | null) => {
-    if (m === null) {
-      await data().remove('content', 'messages');
-      setMessages(DEFAULT_MESSAGES);
-    } else {
-      await data().put('content', 'messages', m);
-      setMessages(m);
-    }
+  const refreshSession = useCallback(async () => {
+    const s = await auth.getSession().catch(() => null);
+    setSession(s);
+    return s;
   }, []);
 
-  const saveLibrary = useCallback(async (l: LibraryEntry[] | null) => {
-    if (l === null) {
-      await data().remove('content', 'library');
-      setLibrary(DEFAULT_LIBRARY);
-    } else {
-      await data().put('content', 'library', l);
-      setLibrary(l);
-    }
+  const signOut = useCallback(async () => {
+    await auth.logout();
+    await syncEngine.reset();
+    setSession(null);
   }, []);
+
+  const setSyncConsent = useCallback(async (on: boolean) => {
+    const r = await api<{ user: unknown }>('/account', { method: 'PATCH', json: { consents: { sync: on } } });
+    if (!r.ok) return false;
+    if (!on) await syncEngine.reset();
+    await refreshSession();
+    return true;
+  }, [refreshSession]);
 
   const resetAll = useCallback(async () => {
+    await syncEngine.reset();
     await data().clearAll();
     try {
       localStorage.clear();
@@ -161,8 +209,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setSettings(DEFAULT_SETTINGS);
     setSession(null);
     setProfile(null);
-    setMessages(DEFAULT_MESSAGES);
-    setLibrary(DEFAULT_LIBRARY);
+    setMessages(STATIC.messages);
+    setLibrary(STATIC.library);
   }, []);
 
   const value = useMemo<AppState>(
@@ -172,15 +220,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
       updateSettings,
       session,
       setSession,
+      refreshSession,
+      signOut,
+      setSyncConsent,
+      syncStatus,
+      server,
       profile,
       updateProfile,
       messages,
-      saveMessages,
       library,
-      saveLibrary,
       resetAll,
     }),
-    [ready, settings, updateSettings, session, profile, updateProfile, messages, saveMessages, library, saveLibrary, resetAll],
+    [ready, settings, updateSettings, session, refreshSession, signOut, setSyncConsent, syncStatus, server, profile, updateProfile, messages, library, resetAll],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

@@ -53,20 +53,22 @@ export function TrustedQuickList() {
   );
 }
 
-export function CrisisScreen({ onClose }: { onClose: () => void }) {
+export function CrisisScreen({ onClose, context = 'asistente' }: { onClose: () => void; context?: 'asistente' | 'comunidad' }) {
   return (
     <Modal title="Tu seguridad es lo primero" onClose={onClose}>
       <div className="stack">
         <p>
           Lo que escribiste es importante. No estás solo ni sola en esto, y mereces ayuda ahora mismo de una persona.
-          Este asistente es una inteligencia artificial y no puede atender una emergencia.
+          {context === 'asistente'
+            ? 'Este asistente es una inteligencia artificial y no puede atender una emergencia.'
+            : 'La comunidad es un espacio entre pares y no puede atender una emergencia; tu mensaje lo revisará primero el equipo de moderación.'}
         </p>
         <EmergencyNumbers />
         <h3>Personas de confianza</h3>
         <p className="small muted">Llamar o escribir a alguien cercano puede ayudarte a no atravesar esto en soledad.</p>
         <TrustedQuickList />
         <button type="button" className="btn btn-outline btn-block" onClick={onClose}>
-          Volver a la conversación
+          {context === 'asistente' ? 'Volver a la conversación' : 'Volver a la comunidad'}
         </button>
       </div>
     </Modal>

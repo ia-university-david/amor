@@ -83,13 +83,39 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
+// Push payloads never carry sensitive content; only a short generic text and an in-app path.
+self.addEventListener('push', (event) => {
+  let payload = {};
+  try {
+    payload = event.data ? event.data.json() : {};
+  } catch {
+    payload = {};
+  }
+  const title = typeof payload.title === 'string' ? payload.title : 'Amor Tóxico';
+  const body = typeof payload.body === 'string' ? payload.body : 'Un momento para ti.';
+  const url = typeof payload.url === 'string' && payload.url.startsWith('/') ? payload.url : '/app';
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body,
+      icon: '/icons/icon-192.png',
+      badge: '/icons/icon-192.png',
+      tag: typeof payload.tag === 'string' ? payload.tag : 'recordatorio',
+      data: { url },
+    }),
+  );
+});
+
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
+  const url = (event.notification.data && event.notification.data.url) || '/app';
   event.waitUntil(
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
-      const existing = clients.find((c) => c.url.includes('/app'));
-      if (existing) return existing.focus();
-      return self.clients.openWindow('/app');
+      const existing = clients.find((c) => new URL(c.url).pathname.startsWith('/app'));
+      if (existing) {
+        if ('navigate' in existing) existing.navigate(url).catch(() => undefined);
+        return existing.focus();
+      }
+      return self.clients.openWindow(url);
     }),
   );
 });

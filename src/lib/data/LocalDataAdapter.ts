@@ -21,8 +21,8 @@ interface SecureRecord {
 }
 
 const ALL_COLLECTIONS: Collection[] = [
-  'settings', 'content', 'auth', 'profile', 'onboarding', 'diary', 'notes', 'unsent', 'reminders',
-  'events', 'limits', 'exercises', 'progress', 'moods', 'chat', 'contacts', 'leads',
+  'settings', 'content', 'auth', 'sync', 'profile', 'onboarding', 'diary', 'notes', 'unsent', 'reminders',
+  'events', 'limits', 'exercises', 'progress', 'moods', 'chat', 'contacts', 'leads', 'reflections',
 ];
 
 export class LocalDataAdapter implements DataAdapter {
@@ -138,7 +138,7 @@ export class LocalDataAdapter implements DataAdapter {
   async exportAll(): Promise<Record<string, StoredItem<unknown>[]>> {
     const out: Record<string, StoredItem<unknown>[]> = {};
     for (const c of ALL_COLLECTIONS) {
-      if (c === 'auth') continue;
+      if (c === 'auth' || c === 'sync') continue;
       const items = await this.list(c);
       if (items.length) out[c] = items;
     }

@@ -16,17 +16,12 @@ import {
   type OnboardingAnswers,
 } from '../../content/onboarding';
 import { TOOLS } from '../../content/tools';
-import { auth } from '../../lib/auth/LocalAuthAdapter';
-import { MIN_PASSWORD_LENGTH } from '../../lib/auth/AuthAdapter';
+import { AuthForm, type AuthExtra } from '../../components/AuthForm';
+import type { Session } from '../../lib/auth';
 import { data } from '../../lib/data';
 import { generatePlan, type InitialPlan } from '../../lib/plan';
 import { useApp } from '../../state/AppContext';
 
-const COUNTRIES = [
-  'Argentina', 'Bolivia', 'Chile', 'Colombia', 'Costa Rica', 'Cuba', 'Ecuador', 'El Salvador', 'España', 'Estados Unidos',
-  'Guatemala', 'Honduras', 'México', 'Nicaragua', 'Panamá', 'Paraguay', 'Perú', 'Puerto Rico', 'República Dominicana',
-  'Uruguay', 'Venezuela', 'Otro',
-];
 
 type StepId =
   | 'bienvenida'
@@ -320,7 +315,7 @@ export default function Onboarding() {
             <ul style={{ margin: 0, paddingLeft: '1.2rem' }}>
               <li>Tus respuestas, para adaptar tu plan y tus sugerencias.</li>
               <li>Lo que escribas en tu diario y en la pausa, para que puedas volver a ello.</li>
-              <li>Todo se guarda cifrado en este dispositivo. En esta versión no se envía a ningún servidor.</li>
+              <li>Todo se guarda cifrado en este dispositivo. Si lo eliges, tu progreso (sin textos libres) se guarda también en tu cuenta.</li>
               <li>Puedes exportar o borrar todos tus datos desde Perfil, en cualquier momento.</li>
               <li>Las notificaciones y la memoria se pueden desactivar cuando quieras.</li>
             </ul>
@@ -415,133 +410,17 @@ export default function Onboarding() {
   }
 }
 
-function RegisterStep({
-  session,
-  onDone,
-}: {
-  session: import('../../lib/auth/AuthAdapter').Session | null;
-  onDone: (s: import('../../lib/auth/AuthAdapter').Session, extra: { country?: string; language?: string; adultConfirmed: boolean }) => Promise<void>;
-}) {
-  const [mode, setMode] = useState<'registro' | 'login'>('registro');
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [country, setCountry] = useState('');
-  const [language, setLanguage] = useState('es');
-  const [adult, setAdult] = useState(false);
-  const [error, setError] = useState('');
-  const [busy, setBusy] = useState(false);
-  const [info, setInfo] = useState('');
-
+function RegisterStep({ session, onDone }: { session: Session | null; onDone: (s: Session, extra: AuthExtra) => Promise<void> }) {
   if (session) {
     return (
       <div className="fade-in stack">
-        <h2>Ya tienes tu perfil, {session.name}</h2>
-        <p className="muted">Sesión local iniciada con {session.email}.</p>
-        <button type="button" className="btn btn-primary" onClick={() => onDone(session, { adultConfirmed: true })}>
+        <h2>Ya tienes tu cuenta, {session.name}</h2>
+        <p className="muted">Sesión iniciada con {session.email}.</p>
+        <button type="button" className="btn btn-primary" onClick={() => onDone(session, { adultConfirmed: Boolean(session.adultConfirmed) })}>
           Continuar <Icon name="next" size={18} />
         </button>
       </div>
     );
   }
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    if (mode === 'registro' && !adult) return setError('Para continuar, confirma que eres mayor de edad.');
-    setBusy(true);
-    const res = mode === 'registro' ? await auth.register({ name, email, password }) : await auth.login(email, password);
-    setBusy(false);
-    if (!res.ok || !res.session) return setError(res.error ?? 'No se pudo continuar.');
-    await onDone(res.session, { country: country || undefined, language, adultConfirmed: mode === 'registro' ? adult : true });
-  };
-
-  return (
-    <form className="fade-in" onSubmit={submit} noValidate>
-      <h2>{mode === 'registro' ? 'Crea tu perfil' : 'Inicia sesión'}</h2>
-      <p className="muted">
-        {mode === 'registro' ? 'Puedes usar un seudónimo. ' : ''}
-        <button type="button" className="btn-ghost" style={{ border: 0, background: 'none', color: 'var(--indigo)', cursor: 'pointer', padding: 0, font: 'inherit', textDecoration: 'underline' }} onClick={() => setMode(mode === 'registro' ? 'login' : 'registro')}>
-          {mode === 'registro' ? 'Ya tengo un perfil en este dispositivo' : 'Crear un perfil nuevo'}
-        </button>
-      </p>
-      {mode === 'registro' && (
-        <div className="field">
-          <label htmlFor="r-name">Nombre o seudónimo</label>
-          <input id="r-name" type="text" autoComplete="nickname" value={name} onChange={(e) => setName(e.target.value)} />
-        </div>
-      )}
-      <div className="field">
-        <label htmlFor="r-email">Correo electrónico</label>
-        <input id="r-email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      </div>
-      <div className="field">
-        <label htmlFor="r-pass">
-          Contraseña <span className="hint">(mínimo {MIN_PASSWORD_LENGTH} caracteres)</span>
-        </label>
-        <input id="r-pass" type="password" autoComplete={mode === 'registro' ? 'new-password' : 'current-password'} value={password} onChange={(e) => setPassword(e.target.value)} />
-      </div>
-      {mode === 'registro' && (
-        <>
-          <div className="split">
-            <div className="field">
-              <label htmlFor="r-country">País</label>
-              <select id="r-country" value={country} onChange={(e) => setCountry(e.target.value)}>
-                <option value="">Prefiero no decirlo</option>
-                {COUNTRIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="field">
-              <label htmlFor="r-lang">Idioma</label>
-              <select id="r-lang" value={language} onChange={(e) => setLanguage(e.target.value)}>
-                <option value="es">Español</option>
-              </select>
-            </div>
-          </div>
-          <label className="check" style={{ marginBottom: '1rem' }}>
-            <input type="checkbox" checked={adult} onChange={(e) => setAdult(e.target.checked)} />
-            <span>Confirmo que soy mayor de edad.</span>
-          </label>
-        </>
-      )}
-      {error && (
-        <p role="alert" style={{ color: 'var(--danger)' }}>
-          {error}
-        </p>
-      )}
-      {info && <Notice>{info}</Notice>}
-      <button type="submit" className="btn btn-primary btn-block" disabled={busy}>
-        {busy ? 'Un momento…' : mode === 'registro' ? 'Crear mi perfil' : 'Entrar'}
-      </button>
-      <div className="stack" style={{ marginTop: '1rem', ['--gap' as string]: '0.5rem' }}>
-        <button
-          type="button"
-          className="btn btn-outline btn-block"
-          onClick={async () => {
-            const r = await auth.requestMagicLink(email);
-            setInfo(r.error ?? 'Revisa tu correo.');
-          }}
-        >
-          Recibir un enlace mágico por correo
-        </button>
-        <button type="button" className="btn btn-outline btn-block" disabled aria-describedby="sso-note">
-          Continuar con Google
-        </button>
-        <button type="button" className="btn btn-outline btn-block" disabled aria-describedby="sso-note">
-          Continuar con Apple
-        </button>
-        <p id="sso-note" className="small muted" style={{ textAlign: 'center' }}>
-          Google y Apple estarán disponibles cuando estén configurados.
-        </p>
-      </div>
-      <Notice icon="info">
-        Versión de desarrollo: tu perfil se crea solo en este dispositivo y la contraseña se guarda protegida con PBKDF2. El inicio de sesión
-        real llegará con el servidor.
-      </Notice>
-    </form>
-  );
+  return <AuthForm onDone={onDone} />;
 }

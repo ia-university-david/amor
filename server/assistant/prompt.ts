@@ -1,13 +1,6 @@
-export const ASSISTANT_MODES = ['impulso', 'tristeza', 'rumiacion', 'entender', 'hablar'] as const;
-export type AssistantMode = (typeof ASSISTANT_MODES)[number];
+import { ASSISTANT_MODES, MODE_LABELS, type AssistantMode } from '../../shared/assistant/modes';
 
-export const MODE_LABELS: Record<AssistantMode, string> = {
-  impulso: 'Tengo un impulso',
-  tristeza: 'Estoy triste',
-  rumiacion: 'No paro de pensar',
-  entender: 'Quiero entender',
-  hablar: 'Solo quiero hablar',
-};
+export { ASSISTANT_MODES, MODE_LABELS, type AssistantMode };
 
 const BASE = `Eres el asistente de acompañamiento de «Tu espacio para hablar», dentro de la app Amor Tóxico (amortoxico.com), un espacio de acompañamiento y educación emocional para personas que atraviesan o salen de una relación que les hizo daño.
 

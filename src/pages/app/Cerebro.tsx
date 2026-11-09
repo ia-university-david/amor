@@ -1,14 +1,20 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Icon } from '../../components/Icon';
 import { Notice, PageHeader } from '../../components/ui';
-import { BRAIN_MODULE_NOTICE, BRAIN_TOPICS } from '../../content/brain';
+import { BRAIN_MODULE_NOTICE, type BrainTopic } from '../../content/brain';
+import { STATIC, toBrainTopic, useContent } from '../../lib/content';
 
 export function useBrainBase(): string {
   return useLocation().pathname.startsWith('/app') ? '/app/cerebro' : '/cerebro';
 }
 
+export function useBrainTopics() {
+  return useContent<Omit<BrainTopic, 'id' | 'title'>, BrainTopic>('brain', toBrainTopic, STATIC.brain).items;
+}
+
 export default function Cerebro() {
   const base = useBrainBase();
+  const BRAIN_TOPICS = useBrainTopics();
   const inApp = base.startsWith('/app');
   return (
     <div className={inApp ? '' : 'container section'}>

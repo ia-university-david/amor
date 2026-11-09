@@ -9,6 +9,7 @@ export type Collection =
   | 'settings'
   | 'content'
   | 'auth'
+  | 'sync'
   // Sensitive (always encrypted at rest)
   | 'profile'
   | 'onboarding'
@@ -23,9 +24,10 @@ export type Collection =
   | 'moods'
   | 'chat'
   | 'contacts'
-  | 'leads';
+  | 'leads'
+  | 'reflections';
 
-export const PLAIN_COLLECTIONS: ReadonlySet<Collection> = new Set(['settings', 'content', 'auth']);
+export const PLAIN_COLLECTIONS: ReadonlySet<Collection> = new Set(['settings', 'content', 'auth', 'sync']);
 
 export function isSensitive(collection: Collection): boolean {
   return !PLAIN_COLLECTIONS.has(collection);
