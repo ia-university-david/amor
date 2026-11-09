@@ -45,7 +45,7 @@ export const DEFAULT_LIBRARY: LibraryEntry[] = [
     summary:
       'Estudio con resonancia magnética funcional en 15 personas (10 mujeres y 5 hombres) que habían sido rechazadas recientemente y seguían intensamente enamoradas. Al ver una foto de la expareja se activaron regiones asociadas con recompensa, motivación, deseo intenso (craving) y regulación emocional.',
     limitations:
-      'Muestra muy pequeña y sin seguimiento en el tiempo. Mide activación cerebral asociada, no causas. Que se activen áreas también implicadas en adicciones no significa que una ruptura sea literalmente una adicción.',
+      'Muestra muy pequeña (15 personas). Mide activación cerebral asociada, no causas. Que se activen áreas también implicadas en adicciones no significa que una ruptura sea literalmente una adicción.',
     reviewedAt: null,
   },
   {

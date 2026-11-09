@@ -33,9 +33,12 @@ export function AppLayout() {
       </div>
     );
   }
-  if (!settings.onboardingComplete && !settings.guest) return <Navigate to="/bienvenida" replace />;
-
   const onPause = location.pathname.startsWith('/app/pausa');
+  // The pause and the educational module must work even before onboarding:
+  // someone may open them straight from the home-screen shortcut in a hard moment.
+  const alwaysOpen = onPause || location.pathname.startsWith('/app/cerebro');
+  if (!settings.onboardingComplete && !settings.guest && !alwaysOpen) return <Navigate to="/bienvenida" replace />;
+  const exploring = !settings.onboardingComplete;
 
   return (
     <div className="app">
@@ -73,7 +76,7 @@ export function AppLayout() {
           </Link>
         </div>
         <main id="contenido" className="app-main">
-          {settings.guest && !settings.onboardingComplete && (
+          {exploring && (
             <div className="notice" style={{ marginBottom: '1rem', maxWidth: 920, marginInline: 'auto' }}>
               <Icon name="eye" size={20} />
               <div>

@@ -45,7 +45,8 @@ export default function Dashboard() {
   };
 
   const name = profile?.name ?? '';
-  const today = formatDate(new Date().toISOString(), { weekday: 'long', day: 'numeric', month: 'long' });
+  const todayRaw = formatDate(new Date().toISOString(), { weekday: 'long', day: 'numeric', month: 'long' });
+  const today = todayRaw.charAt(0).toUpperCase() + todayRaw.slice(1);
   const doneCount = MODULES.filter((m) => completed[m.id]).length;
   const topic = BRAIN_TOPICS[Math.floor(Date.now() / 86_400_000) % BRAIN_TOPICS.length];
   const daily = messageOfTheDay(messages);
@@ -79,7 +80,7 @@ export default function Dashboard() {
   return (
     <div className="stack" style={{ ['--gap' as string]: '1.25rem' }}>
       <header className="fade-in">
-        <p className="muted small" style={{ margin: 0, textTransform: 'capitalize' }}>
+        <p className="muted small" style={{ margin: 0 }}>
           {today}
         </p>
         <h1 style={{ marginBottom: '0.25rem' }}>
