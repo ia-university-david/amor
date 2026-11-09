@@ -24,6 +24,7 @@ const Espacio = lazy(() => import('./pages/app/Espacio'));
 const Perfil = lazy(() => import('./pages/app/Perfil'));
 const Limites = lazy(() => import('./pages/app/Limites'));
 const HoyDificil = lazy(() => import('./pages/app/HoyDificil'));
+const CheckIn = lazy(() => import('./pages/app/CheckIn'));
 const Asistente = lazy(() => import('./pages/app/Asistente'));
 const Cerebro = lazy(() => import('./pages/app/Cerebro'));
 const CerebroTema = lazy(() => import('./pages/app/CerebroTema'));
@@ -91,6 +92,7 @@ export function App() {
           <Route path="perfil" element={<Perfil />} />
           <Route path="limites" element={<Limites />} />
           <Route path="dificil" element={<HoyDificil />} />
+          <Route path="checkin" element={<CheckIn />} />
           <Route
             path="asistente"
             element={

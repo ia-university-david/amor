@@ -81,6 +81,7 @@ export function generatePseudonym(random: () => number = Math.random): string {
 }
 
 export const DEFAULT_ROOMS = [
+  { id: 'decidiendo', name: 'Estoy decidiendo', description: 'Para quien sigue dentro o está pensando si quedarse. Sin empujar a irse ni a quedarse. Los mensajes pasan por moderación.' },
   { id: 'primeros-dias', name: 'Primeros días', description: 'Para cuando todo es reciente y cuesta ordenar lo que sientes.' },
   { id: 'contacto-cero', name: 'Contacto cero', description: 'Sostener los límites que elegiste, con sus días buenos y difíciles.' },
   { id: 'noches-dificiles', name: 'Noches difíciles', description: 'Compañía para los momentos en que la noche se hace larga.' },

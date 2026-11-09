@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Icon } from '../../components/Icon';
 import { EmptyState, Notice, PageHeader } from '../../components/ui';
 import { AUTHOR, LINKS } from '../../content/links';
+import { QUOTE_NOTICE } from '../../content/quotes';
 import { MODULES, PILLARS } from '../../content/program';
 import { STATIC, toLaura, useContent, type LauraItem } from '../../lib/content';
 import { Markdown } from '../../lib/markdown';
@@ -68,9 +69,30 @@ export default function ModulePage() {
       ) : mod.source === 'laura-pendiente' ? (
         <div className="stack">
           <Notice icon="clock">
-            <strong>Contenido autorizado pendiente.</strong> Este módulo desarrollará uno de los temas del libro <em>Amor Tóxico</em> de{' '}
-            {AUTHOR.name}. Lo publicaremos cuando tengamos el texto aprobado por la autora; no queremos escribir en su nombre.
+            <strong>Texto de Laura pendiente de autorización.</strong> Puedes hacer la paráfrasis ahora. El capítulo completo se publicará aquí, con el mismo identificador, cuando ella lo apruebe.
+            {mod.book && (
+              <span>
+                {' '}
+                Referencia: cap. {mod.book.chapter}, pp. {mod.book.pages}.
+              </span>
+            )}
           </Notice>
+          {mod.quote && (
+            <figure className="quote-card">
+              <blockquote>«{mod.quote.text}»</blockquote>
+              <figcaption>
+                {AUTHOR.name}, <em>Amor tóxico</em>, p. {mod.quote.page}. {QUOTE_NOTICE}
+              </figcaption>
+            </figure>
+          )}
+          {mod.mediaSlot && (
+            <div className="card tint-lavanda">
+              <strong>Audio y video</strong>
+              <p className="small" style={{ marginBottom: 0 }}>
+                Hueco reservado para una grabación de Laura. Todavía no hay archivo. No hace falta un plan de pago para la pausa ni para el plan de protección.
+              </p>
+            </div>
+          )}
           <div className="card">
             <h3>Mientras tanto</h3>
             <p className="small">Puedes trabajar este pilar con los ejercicios disponibles o leer el libro.</p>

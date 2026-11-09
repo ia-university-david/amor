@@ -3,6 +3,7 @@ import { useApp } from '../state/AppContext';
 import { useOnline } from '../lib/pwa';
 import { Icon, Logo, type IconName } from './Icon';
 import { InstallPrompt } from './InstallPrompt';
+import { Splash } from './Splash';
 
 const MAIN_NAV: { to: string; label: string; icon: IconName; end?: boolean }[] = [
   { to: '/app', label: 'Inicio', icon: 'home', end: true },
@@ -23,7 +24,7 @@ const SECONDARY_NAV: { to: string; label: string; icon: IconName }[] = [
 ];
 
 export function AppLayout() {
-  const { ready, settings } = useApp();
+  const { ready, settings, updateSettings } = useApp();
   const location = useLocation();
   const online = useOnline();
 
@@ -38,12 +39,17 @@ export function AppLayout() {
   const onPause = location.pathname.startsWith('/app/pausa');
   // The pause and the educational module must work even before onboarding:
   // someone may open them straight from the home-screen shortcut in a hard moment.
-  const alwaysOpen = onPause || location.pathname.startsWith('/app/cerebro');
+  const alwaysOpen =
+    onPause ||
+    location.pathname.startsWith('/app/cerebro') ||
+    location.pathname.startsWith('/app/checkin') ||
+    location.pathname.startsWith('/app/dificil');
   if (!settings.onboardingComplete && !settings.guest && !alwaysOpen) return <Navigate to="/bienvenida" replace />;
   const exploring = !settings.onboardingComplete;
 
   return (
     <div className="app">
+      {!settings.splashSeen && !alwaysOpen && <Splash onEnter={() => void updateSettings({ splashSeen: true })} />}
       <a href="#contenido" className="skip-link">
         Saltar al contenido
       </a>

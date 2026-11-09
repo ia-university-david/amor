@@ -5,11 +5,19 @@ import { Progress, formatDate } from '../../components/ui';
 import { BRAIN_TOPICS } from '../../content/brain';
 import { messageOfTheDay } from '../../content/messages';
 import { MODULES } from '../../content/program';
+import { type LimitsState } from '../../content/limits';
+import { QUOTE_NOTICE, quoteFor } from '../../content/quotes';
+import type { OnboardingAnswers } from '../../content/onboarding';
 import { data } from '../../lib/data';
 import type { UrgeEvent } from '../../lib/events';
+import { companionLine } from '../../lib/companion';
+import { daysSince, EMPTY_COUNTER, type NoContactCounter } from '../../lib/noContact';
+import { weekKey } from '../../lib/insights';
 import { detectPatterns } from '../../lib/patterns';
 import { todayKey, useModuleProgress, type MoodEntry } from '../../lib/progress';
-import { useCollection } from '../../lib/useCollection';
+import { kindWeek } from '../../lib/weeklyKind';
+import { milestones } from '../../lib/milestones';
+import { useCollection, useDoc } from '../../lib/useCollection';
 import { useApp } from '../../state/AppContext';
 
 const NEEDS: { label: string; icon: IconName; to?: string; action?: 'mejor' }[] = [
@@ -29,6 +37,11 @@ export default function Dashboard() {
   const { completed, markDone } = useModuleProgress();
   const events = useCollection<UrgeEvent>('events');
   const diary = useCollection<unknown>('diary');
+  const unsent = useCollection<unknown>('unsent');
+  const counter = useDoc<NoContactCounter>('limits', 'counter', EMPTY_COUNTER);
+  const limits = useDoc<LimitsState>('limits', 'state', { modality: null, rules: [] });
+  const identity = useDoc<{ stopped: string; likes: string }>('identity', 'map', { stopped: '', likes: '' });
+  const [answers, setAnswers] = useState<OnboardingAnswers>({});
   const [mood, setMood] = useState<MoodEntry | null>(null);
   const [better, setBetter] = useState(false);
   const [editingReminder, setEditingReminder] = useState(false);
@@ -36,6 +49,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     data().get<MoodEntry>('moods', todayKey()).then((m) => setMood(m ?? null));
+    data().get<OnboardingAnswers>('onboarding', 'answers').then((a) => setAnswers(a ?? {}));
   }, []);
 
   const saveMood = async (emotion: string) => {
@@ -54,10 +68,10 @@ export default function Dashboard() {
   const nextStep = useMemo(() => {
     const plan = profile?.plan;
     if (plan && !completed['primera-actividad']) return { title: plan.firstActivity.title, text: plan.firstActivity.description, to: plan.firstActivity.to, minutes: plan.firstActivity.minutes, isPlan: true };
+    const byChapter = plan?.focusChapters?.flatMap((id) => MODULES.filter((m) => m.stage === id));
     const order = plan?.focusPillars ?? [1, 2, 3, 4, 5];
-    const candidate = order
-      .flatMap((p) => MODULES.filter((m) => m.pillar === p))
-      .find((m) => !completed[m.id] && m.source === 'original');
+    const pool = byChapter?.length ? byChapter : order.flatMap((p) => MODULES.filter((m) => m.pillar === p));
+    const candidate = pool.find((m) => !completed[m.id]);
     if (!candidate) return null;
     return {
       title: candidate.title,
@@ -77,8 +91,40 @@ export default function Dashboard() {
   if (diary.items.length) facts.push(`Escribiste ${diary.items.length} ${diary.items.length === 1 ? 'entrada' : 'entradas'} en tu diario.`);
   if (doneCount) facts.push(`Completaste ${doneCount} ${doneCount === 1 ? 'actividad' : 'actividades'} de tu camino.`);
 
+  const weekStart = weekKey();
+  const inWeek = (iso: string) => iso.slice(0, 10) >= weekStart;
+  const allCheckIns = events.items.map((i) => i.value).filter((e) => e.kind === 'checkin');
+  const checkIns = allCheckIns.filter((e) => inWeek(e.at));
+  const weekNote = kindWeek({
+    pauses: pauseEvents.filter((e) => inWeek(e.at)).length,
+    difficult: checkIns.filter((e) => e.moment === 'dificil').length + events.items.filter((e) => e.value.kind === 'dificil' && inWeek(e.value.at)).length,
+    necessary: checkIns.filter((e) => e.moment === 'necesario').length,
+    checkIns: checkIns.length,
+    exercises: Object.values(completed).filter((iso) => inWeek(iso)).length,
+    topEmotion: mood?.emotion ?? null,
+  });
+  const badges = milestones({
+    exercisesDone: doneCount,
+    pauses: pauseEvents.length,
+    checkIns: allCheckIns.length,
+    difficultMoments: allCheckIns.filter((e) => e.moment === 'dificil').length,
+    rules: limits.value.rules.length,
+    unsent: unsent.items.length,
+    identityNotes: (identity.value.stopped.trim() ? 1 : 0) + (identity.value.likes.trim() ? 1 : 0),
+  }).filter((m) => m.reached);
+
   return (
     <div className="stack" style={{ ['--gap' as string]: '1.25rem' }}>
+      <HomeCompanion
+        name={name}
+        situation={answers.situation}
+        contactMode={profile?.plan?.contactMode}
+        nightPattern={insights.some((i) => i.id === 'noche')}
+        counterOn={Boolean(counter.value.enabled && counter.value.startedAt)}
+        days={daysSince(counter.value.startedAt)}
+        necessary={profile?.plan?.contactMode === 'necesario'}
+      />
+
       <header className="fade-in">
         <p className="muted small" style={{ margin: 0 }}>
           {today}
@@ -122,6 +168,47 @@ export default function Dashboard() {
             </div>
           </div>
         )}
+      </section>
+
+      <section aria-label="Herramientas">
+        <h2 className="list-kicker">Para este momento</h2>
+        <div className="tool-grid">
+          {[
+            { to: '/app/checkin', label: 'Cómo estoy', icon: 'heart' as const },
+            { to: '/app/espacio?seccion=calendario', label: 'Calendario', icon: 'calendar' as const },
+            { to: '/app/limites', label: 'Mis reglas', icon: 'shield' as const },
+            { to: '/app/espacio?seccion=recordatorios', label: 'Recordatorios', icon: 'bell' as const },
+            { to: '/app/camino', label: 'Ejercicios', icon: 'path' as const },
+            { to: '/app/asistente', label: 'Asistente', icon: 'chat' as const },
+            { to: '/app/pausa', label: 'Pausa', icon: 'pause' as const },
+            { to: '/app/espacio?seccion=carta', label: 'Carta sin enviar', icon: 'pen' as const },
+          ].map((t) => (
+            <Link key={t.label} to={t.to} className="card card-link tool-tile">
+              <Icon name={t.icon} />
+              <span>{t.label}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {badges.length > 0 && (
+        <section className="card" aria-labelledby="hitos">
+          <h2 id="hitos" style={{ fontSize: '1.2rem' }}>
+            Hitos que no se pierden
+          </h2>
+          <ul className="small" style={{ margin: 0, paddingLeft: '1.1rem' }}>
+            {badges.map((b) => (
+              <li key={b.id}>
+                <strong>{b.title}.</strong> {b.detail}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <section className="card tint-verde">
+        <h2 style={{ fontSize: '1.2rem' }}>Esta semana, con cariño</h2>
+        <p style={{ marginBottom: 0 }}>{weekNote}</p>
       </section>
 
       <div className="grid" style={{ ['--min' as string]: '280px' }}>
@@ -314,5 +401,86 @@ export default function Dashboard() {
         </Link>
       </div>
     </div>
+  );
+}
+
+function HomeCompanion({
+  name,
+  situation,
+  contactMode,
+  nightPattern,
+  counterOn,
+  days,
+  necessary,
+}: {
+  name: string;
+  situation?: OnboardingAnswers['situation'];
+  contactMode?: 'dentro' | 'necesario' | 'voluntario' | 'sin-definir';
+  nightPattern: boolean;
+  counterOn: boolean;
+  days: number;
+  necessary: boolean;
+}) {
+  const line = companionLine({ name, situation, contactMode, nightPattern });
+  const quoteKey =
+    situation === 'sigo-relacion' || situation === 'considerando' || contactMode === 'dentro'
+      ? 'dentro'
+      : situation === 'reciente'
+        ? 'recien'
+        : situation === 'hace-mucho'
+          ? 'identidad'
+          : nightPattern
+            ? 'noche'
+            : 'distancia';
+  const quote = quoteFor(quoteKey);
+  const turn = Math.min(100, (days % 30) * (100 / 30));
+  return (
+    <>
+      <section className="card tint-niebla">
+        <h2 style={{ fontSize: '1.35rem' }}>{line.title}</h2>
+        <p>{line.body}</p>
+        <Link to={line.suggestion.to} className="btn btn-primary btn-sm">
+          {line.suggestion.label}
+        </Link>
+      </section>
+      {counterOn && (
+        <section className="card day-ring-card" aria-label="Contador del límite que elegiste">
+          <p style={{ marginTop: 0 }}>Días cuidando el límite que elegiste</p>
+          <div className="day-ring" style={{ ['--turn' as string]: `${turn}%` }}>
+            <strong>{days}</strong>
+            <span>días</span>
+          </div>
+          <p className="small muted">{necessary ? 'El contacto por hijos, trámites o seguridad no cuenta aquí.' : 'Es una medida entre otras. No mide tu valor.'}</p>
+          <div className="row">
+            <Link to="/app/checkin?tipo=sostuve" className="btn btn-outline btn-sm">
+              Sostuve lo que elegí
+            </Link>
+            <Link to="/app/checkin?tipo=dificil" className="btn btn-outline btn-sm">
+              Fue un momento difícil
+            </Link>
+            {necessary && (
+              <Link to="/app/checkin?tipo=necesario" className="btn btn-ghost btn-sm">
+                Fue un contacto necesario
+              </Link>
+            )}
+          </div>
+        </section>
+      )}
+      {!counterOn && (
+        <section className="card">
+          <h2 style={{ fontSize: '1.2rem' }}>Un momento para mirar cómo estás</h2>
+          <p className="small muted">No se trata de resistir o fallar. Se trata de notar qué pasó, sin borrar lo aprendido.</p>
+          <Link to="/app/checkin" className="btn btn-primary btn-sm">
+            Hacer un check-in
+          </Link>
+        </section>
+      )}
+      <figure className="card quote-card">
+        <blockquote>«{quote.text}»</blockquote>
+        <figcaption>
+          Laura Rojas, <em>Amor tóxico</em>, p. {quote.page}. {QUOTE_NOTICE}
+        </figcaption>
+      </figure>
+    </>
   );
 }

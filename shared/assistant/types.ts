@@ -11,7 +11,9 @@ export type AssistantTopic =
   | 'soledad'
   | 'celos'
   | 'dormir'
-  | 'limites';
+  | 'limites'
+  | 'decidir'
+  | 'dudar';
 
 export interface ChatMessage {
   id: string;

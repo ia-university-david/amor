@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Icon } from '../../components/Icon';
 import { ChoiceList, EmptyState, IntensitySlider, MultiChoice, Progress, formatDate } from '../../components/ui';
+import { QUOTE_NOTICE } from '../../content/quotes';
 import { EXERCISES, MODULES, type ExerciseStep } from '../../content/program';
 import { useModuleProgress } from '../../lib/progress';
 import { useCollection } from '../../lib/useCollection';
@@ -157,7 +158,24 @@ export default function ExercisePage() {
           Ejercicio · {module?.minutes ?? 10} min
         </span>
         <h1>{exercise.title}</h1>
+        {exercise.review === 'pendiente' && <p className="badge warn">Pendiente de revisión profesional y de la aprobación de Laura</p>}
         <p style={{ fontSize: '1.1rem' }}>{exercise.intro}</p>
+        {exercise.quote && (
+          <figure className="quote-card">
+            <blockquote>«{exercise.quote.text}»</blockquote>
+            <figcaption>
+              Laura Rojas, <em>Amor tóxico</em>, p. {exercise.quote.page}. {QUOTE_NOTICE}
+            </figcaption>
+          </figure>
+        )}
+        {module?.mediaSlot && (
+          <div className="card tint-lavanda">
+            <strong>Espacio para la voz de Laura</strong>
+            <p className="small muted" style={{ marginBottom: 0 }}>
+              Aquí irá un audio o un video corto cuando ella lo grabe. Mientras tanto, el ejercicio escrito ya se puede hacer. Pausa, el plan de protección y los números de emergencia siguen siendo gratis.
+            </p>
+          </div>
+        )}
         <p className="small muted">Puedes dejar en blanco cualquier pregunta. No hay respuestas correctas.</p>
         <button type="button" className="btn btn-primary" onClick={() => setIndex(0)}>
           Empezar

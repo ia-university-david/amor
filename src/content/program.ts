@@ -1,3 +1,6 @@
+import type { ChapterId } from './chapters';
+import { BOOK_EXERCISES } from './bookExercises';
+
 export type PillarId = 1 | 2 | 3 | 4 | 5;
 
 export interface Pillar {
@@ -19,38 +22,65 @@ export type ModuleKind = 'ejercicio' | 'lectura' | 'herramienta';
 export interface ProgramModule {
   id: string;
   pillar: PillarId;
+  /** Capítulo del recorrido según la situación de la persona. */
+  stage: ChapterId;
   title: string;
   summary: string;
   kind: ModuleKind;
   minutes: number;
-  /** 'laura-pendiente': theme from Laura Rojas' book; authorized text not yet delivered. */
-  source: 'original' | 'laura-pendiente';
+  /**
+   * 'laura-pendiente': el ejercicio ya se puede hacer (paráfrasis).
+   * El capítulo autorizado de Laura se publica después, con el mismo id, desde el CMS.
+   */
+  source: 'original' | 'laura-pendiente' | 'laura';
   exerciseId?: string;
   to?: string;
+  book?: { chapter: string; pages: string };
+  quote?: { text: string; page: number };
+  /** Hueco para un audio o un video de Laura, cuando ella lo grabe. */
+  mediaSlot?: boolean;
 }
 
 export const MODULES: ProgramModule[] = [
-  { id: 'reconocer-patrones', pillar: 1, title: 'Reconocer patrones en la relación', summary: 'Cómo identificar dinámicas que se repiten y lo que provocan en ti.', kind: 'lectura', minutes: 8, source: 'laura-pendiente' },
-  { id: 'senales-alerta', pillar: 1, title: 'Señales de alerta', summary: 'Señales que vale la pena observar en una relación, sin etiquetar a nadie.', kind: 'lectura', minutes: 6, source: 'laura-pendiente' },
-  { id: 'que-perdi', pillar: 1, title: '¿Qué perdí realmente?', summary: 'Distinguir la pérdida de la persona de otras pérdidas que llegan con ella.', kind: 'ejercicio', minutes: 10, source: 'original', exerciseId: 'que-perdi' },
-  { id: 'apego', pillar: 1, title: 'Preguntas sobre el apego', summary: 'Cinco preguntas para distinguir lo que extrañas de lo que necesitas.', kind: 'ejercicio', minutes: 8, source: 'original', exerciseId: 'apego' },
+  { id: 'desaparecer', stage: 'dentro', pillar: 1, title: 'Cuando empiezas a desaparecer', summary: 'Las áreas de tu vida que se apagaron y lo que dejaste de hacer.', kind: 'ejercicio', minutes: 8, source: 'laura-pendiente', exerciseId: 'desaparecer', book: { chapter: 'Introducción', pages: '17–19' }, quote: { text: 'empezamos a desaparecer gradualmente, a renunciar a nosotros mismos', page: 17 }, mediaSlot: true },
+  { id: 'escuchar-me', stage: 'dentro', pillar: 1, title: 'Escuchar-ME', summary: 'El cuerpo y las corazonadas como información, no como diagnóstico.', kind: 'ejercicio', minutes: 10, source: 'laura-pendiente', exerciseId: 'escuchar-me', book: { chapter: 'III', pages: '41–52' }, quote: { text: 'Escucha a tu cuerpo, no a tus argumentos', page: 45 }, mediaSlot: true },
+  { id: 'relacion-hoy', stage: 'dentro', pillar: 1, title: 'Mi relación hoy', summary: 'Once miradas para prestar atención, sin poner etiquetas.', kind: 'ejercicio', minutes: 6, source: 'laura-pendiente', exerciseId: 'relacion-hoy', book: { chapter: 'IV', pages: '69–76' }, mediaSlot: true },
+  { id: 'senales-alerta', stage: 'dentro', pillar: 1, title: 'Señales que alertan y señales que cuidan', summary: 'Conductas que dejan alerta y conductas que reparan. Sin nombrar a nadie.', kind: 'ejercicio', minutes: 8, source: 'laura-pendiente', exerciseId: 'senales', book: { chapter: 'II y IV', pages: '36–39, 73–74' }, mediaSlot: true },
+  { id: 'defender', stage: 'dentro', pillar: 1, title: 'Defender lo indefendible', summary: 'La distancia entre lo que sientes y lo que haces, y las razones que la tapan.', kind: 'ejercicio', minutes: 10, source: 'laura-pendiente', exerciseId: 'defender', book: { chapter: 'IV', pages: '60–66' }, mediaSlot: true },
+  { id: 'dice-hace', stage: 'dentro', pillar: 1, title: 'Lo que dice y lo que hace', summary: 'Promesas, hechos y las condiciones que siempre quedan para después.', kind: 'ejercicio', minutes: 10, source: 'laura-pendiente', exerciseId: 'dice-hace', book: { chapter: 'VI', pages: '93–101' }, mediaSlot: true },
+  { id: 'consejo', stage: 'dentro', pillar: 1, title: 'El consejo que le darías a alguien que quieres', summary: 'Una carta para ti, con la claridad que le ofrecerías a otra persona.', kind: 'ejercicio', minutes: 8, source: 'laura-pendiente', exerciseId: 'consejo', book: { chapter: 'VII', pages: '105–106' }, mediaSlot: true },
+  { id: 'anclas', stage: 'dentro', pillar: 1, title: 'Lo que me ancla', summary: 'Miedo, hijos, dinero, cariño, vergüenza. Razones respetables, miradas una a una.', kind: 'ejercicio', minutes: 8, source: 'laura-pendiente', exerciseId: 'anclas', book: { chapter: 'VIII', pages: '138' }, mediaSlot: true },
 
-  { id: 'cerebro', pillar: 2, title: 'Tu cerebro después de una ruptura', summary: '15 temas breves sobre recompensa, recuerdos, rumiación, hábitos y recuperación.', kind: 'herramienta', minutes: 3, source: 'original', to: '/app/cerebro' },
-  { id: 'ciclo-control', pillar: 2, title: 'El ciclo de control y manipulación', summary: 'Por qué algunas relaciones alternan tensión, conflicto y reconciliación.', kind: 'lectura', minutes: 8, source: 'laura-pendiente' },
+  { id: 'que-perdi', stage: 'recien', pillar: 1, title: '¿Qué perdí realmente?', summary: 'Distinguir la pérdida de la persona de otras pérdidas que llegan con ella.', kind: 'ejercicio', minutes: 10, source: 'original', exerciseId: 'que-perdi' },
+  { id: 'apego', stage: 'recien', pillar: 1, title: 'Preguntas sobre el apego', summary: 'Cinco preguntas para distinguir lo que extrañas de lo que necesitas.', kind: 'ejercicio', minutes: 8, source: 'original', exerciseId: 'apego' },
+  { id: 'preparar', stage: 'recien', pillar: 3, title: 'Preparar una conversación', summary: 'Escribir en calma lo que necesitas decir. No garantiza que te escuchen.', kind: 'ejercicio', minutes: 10, source: 'laura-pendiente', exerciseId: 'preparar', book: { chapter: 'IV', pages: '54–56' }, mediaSlot: true },
 
-  { id: 'pausa-practica', pillar: 3, title: 'Practicar la pausa', summary: 'Conoce la pausa antes de necesitarla: impulso, intensidad, necesidad y alternativa.', kind: 'herramienta', minutes: 4, source: 'original', to: '/app/pausa' },
-  { id: 'conciencia', pillar: 3, title: 'Prácticas de atención y agencia', summary: 'Atención plena, respiración cómoda, pensamientos, valores, autocompasión y decisiones propias.', kind: 'ejercicio', minutes: 10, source: 'original', exerciseId: 'conciencia' },
-  { id: 'mis-limites', pillar: 3, title: 'Definir mis límites de contacto', summary: 'Elige una modalidad de contacto y reglas que te cuiden.', kind: 'herramienta', minutes: 5, source: 'original', to: '/app/limites' },
+  { id: 'proteccion', stage: 'primeros', pillar: 3, title: 'Plan de protección y salida', summary: 'Un plan privado si hay miedo. No es una fecha límite y no sustituye una emergencia.', kind: 'ejercicio', minutes: 12, source: 'laura-pendiente', exerciseId: 'proteccion', book: { chapter: 'VIII y X', pages: '139–141, 155–160' }, mediaSlot: true },
+  { id: 'pausa-practica', stage: 'primeros', pillar: 3, title: 'Practicar la pausa', summary: 'Conoce la pausa antes de necesitarla: impulso, intensidad, necesidad y alternativa.', kind: 'herramienta', minutes: 4, source: 'original', to: '/app/pausa' },
 
-  { id: 'perdida-identidad', pillar: 4, title: 'Pérdida de identidad', summary: 'Cuando la relación cambió quién eras, y cómo empezar a recuperarte.', kind: 'lectura', minutes: 8, source: 'laura-pendiente' },
-  { id: 'creencias-limites', pillar: 4, title: 'Creencias limitantes y límites sanos', summary: 'Las ideas que sostienen el dolor y cómo poner límites con claridad.', kind: 'lectura', minutes: 8, source: 'laura-pendiente' },
-  { id: 'creencias', pillar: 4, title: 'Revisar un pensamiento', summary: 'Pensamiento, emoción, evidencia a favor y en contra, y una alternativa equilibrada.', kind: 'ejercicio', minutes: 10, source: 'original', exerciseId: 'creencias' },
-  { id: 'amor-propio', pillar: 4, title: 'Amor propio', summary: 'Técnicas para tratarte con el mismo cuidado que darías a alguien que quieres.', kind: 'lectura', minutes: 7, source: 'laura-pendiente' },
-  { id: 'soledad', pillar: 4, title: 'Estar a solas sin sentirte abandonado', summary: 'Un programa progresivo para reconstruir tu tiempo propio.', kind: 'ejercicio', minutes: 12, source: 'original', exerciseId: 'soledad' },
+  { id: 'mis-limites', stage: 'distancia', pillar: 3, title: 'La distancia que elijo', summary: 'Modalidad de contacto y reglas. El contacto necesario nunca es un retroceso.', kind: 'herramienta', minutes: 8, source: 'original', to: '/app/limites' },
+  { id: 'lo-que-paso', stage: 'distancia', pillar: 3, title: 'Lo que sí pasó', summary: 'El recuerdo bonito y el cuadro completo, para leerlo cuando idealizas.', kind: 'ejercicio', minutes: 8, source: 'laura-pendiente', exerciseId: 'lo-que-paso', book: { chapter: 'VIII', pages: '125–126' }, mediaSlot: true },
+  { id: 'botiquin', stage: 'distancia', pillar: 3, title: 'Mi botiquín', summary: 'Una lista corta para los días en que no quieres pensar qué hacer.', kind: 'ejercicio', minutes: 6, source: 'laura-pendiente', exerciseId: 'botiquin', book: { chapter: 'IX', pages: '152' }, mediaSlot: true },
+  { id: 'cerebro', stage: 'distancia', pillar: 2, title: 'Tu cerebro después de una ruptura', summary: 'Temas breves sobre recompensa, recuerdos, rumiación y hábitos.', kind: 'herramienta', minutes: 3, source: 'original', to: '/app/cerebro' },
 
-  { id: 'autonomia', pillar: 5, title: 'Autonomía emocional', summary: 'Sostenerte sin dejar de necesitar a otros.', kind: 'lectura', minutes: 7, source: 'laura-pendiente' },
-  { id: 'amor-autonomia', pillar: 5, title: 'Amor y autonomía', summary: 'Elegir compartir frente a sentir que no puedes vivir sin alguien.', kind: 'ejercicio', minutes: 8, source: 'original', exerciseId: 'amor-autonomia' },
-  { id: 'relaciones-futuras', pillar: 5, title: 'Relaciones futuras', summary: 'Cómo reconocer lo que quieres y lo que no en tus próximos vínculos.', kind: 'lectura', minutes: 7, source: 'laura-pendiente' },
+  { id: 'como-empezo', stage: 'comprender', pillar: 2, title: 'Cómo empezó', summary: 'Por qué al principio costó ver lo que después fue evidente.', kind: 'ejercicio', minutes: 8, source: 'laura-pendiente', exerciseId: 'como-empezo', book: { chapter: 'II y VIII', pages: '30–36, 120–121' }, quote: { text: 'La ilusión del amor ideal es un enemigo tremendo de hombres y mujeres por igual.', page: 31 }, mediaSlot: true },
+  { id: 'duelo', stage: 'comprender', pillar: 1, title: 'Duelo y emociones permitidas', summary: 'Tristeza, alivio, rabia y la vida que imaginaste. Sin un orden obligatorio.', kind: 'ejercicio', minutes: 8, source: 'laura-pendiente', exerciseId: 'duelo', book: { chapter: 'IX', pages: '147–148' }, quote: { text: 'Una ruptura no es necesariamente un fracaso', page: 56 }, mediaSlot: true },
+  { id: 'piano', stage: 'comprender', pillar: 1, title: 'La culpa que ayuda y la que solo pesa', summary: 'Soltar el peso sin perder la responsabilidad de cuidarte ahora.', kind: 'ejercicio', minutes: 10, source: 'laura-pendiente', exerciseId: 'piano', book: { chapter: 'III', pages: '47–49' }, quote: { text: 'cuando uno no gana, aprende.', page: 47 }, mediaSlot: true },
+  { id: 'reconocer-patrones', stage: 'comprender', pillar: 1, title: 'Patrones: el A-B-C', summary: 'Hecho, pensamiento y reacción. Mirar tu parte no es culparte del daño.', kind: 'ejercicio', minutes: 12, source: 'laura-pendiente', exerciseId: 'abc', book: { chapter: 'V', pages: '84–91' }, mediaSlot: true },
+  { id: 'ciclo-control', stage: 'comprender', pillar: 2, title: 'Cuando dudas de lo que viviste', summary: 'Hechos, lo que te dijeron y la confianza en tu propia percepción.', kind: 'lectura', minutes: 8, source: 'laura-pendiente', book: { chapter: 'V y IX', pages: '86–87, 143–148' }, mediaSlot: true },
+  { id: 'creencias', stage: 'comprender', pillar: 4, title: 'Revisar un pensamiento', summary: 'Pensamiento, emoción, evidencia a favor y en contra, y una alternativa equilibrada.', kind: 'ejercicio', minutes: 10, source: 'original', exerciseId: 'creencias' },
+  { id: 'me-pierdo', stage: 'comprender', pillar: 4, title: '¿Me pierdo cuidando?', summary: 'Decir siempre que sí y sentirte responsable del otro, sin etiquetas.', kind: 'ejercicio', minutes: 10, source: 'laura-pendiente', exerciseId: 'me-pierdo', book: { chapter: 'VII', pages: '106–117' }, mediaSlot: true },
+  { id: 'creencias-limites', stage: 'comprender', pillar: 4, title: 'Lo que permití y lo que ya no', summary: 'De una tolerancia repetida a un límite que sí puedes sostener.', kind: 'ejercicio', minutes: 8, source: 'laura-pendiente', exerciseId: 'lo-permiti', book: { chapter: 'VI', pages: '98–102' }, quote: { text: 'Amarnos y priorizarnos no es egoísmo, es regla básica de supervivencia.', page: 102 }, mediaSlot: true },
+
+  { id: 'perdida-identidad', stage: 'identidad', pillar: 4, title: 'Yo no sé qué me gusta', summary: 'Cuatro listas cortas para volver a una identidad que se siente temporalmente lejos.', kind: 'ejercicio', minutes: 12, source: 'laura-pendiente', exerciseId: 'gustos', book: { chapter: 'IX', pages: '150–152' }, mediaSlot: true },
+  { id: 'amor-propio', stage: 'identidad', pillar: 4, title: 'Amar-ME y cuidar-ME', summary: 'Una conversación honesta contigo y un cuidado concreto del cuerpo.', kind: 'ejercicio', minutes: 12, source: 'laura-pendiente', exerciseId: 'amar-me', book: { chapter: 'IV y V', pages: '57–60, 79–83' }, quote: { text: 'El amor propio es una conversación íntima y honesta con nosotros mismos, no con los demás.', page: 57 }, mediaSlot: true },
+  { id: 'perdon', stage: 'identidad', pillar: 4, title: 'Perdonarte, si tú lo eliges', summary: 'Opcional. Perdonar no es olvidar, ni reconciliarte, ni volver a escribir.', kind: 'ejercicio', minutes: 8, source: 'laura-pendiente', exerciseId: 'perdon', book: { chapter: 'IX', pages: '152–153' }, quote: { text: 'perdonar y olvidar son dos cosas muy distintas', page: 153 }, mediaSlot: true },
+  { id: 'soledad', stage: 'identidad', pillar: 4, title: 'Estar a solas sin sentirte abandonado', summary: 'Un programa progresivo para reconstruir tu tiempo propio.', kind: 'ejercicio', minutes: 12, source: 'original', exerciseId: 'soledad' },
+  { id: 'conciencia', stage: 'identidad', pillar: 3, title: 'Prácticas de atención y agencia', summary: 'Atención, respiración cómoda, valores y una decisión pequeña que depende de ti.', kind: 'ejercicio', minutes: 10, source: 'original', exerciseId: 'conciencia' },
+
+  { id: 'autonomia', stage: 'futuro', pillar: 5, title: 'Autonomía emocional', summary: 'Sostenerte sin dejar de necesitar a otros. El capítulo de Laura se publicará cuando ella lo autorice.', kind: 'lectura', minutes: 7, source: 'laura-pendiente', book: { chapter: 'VI', pages: '100–102' }, mediaSlot: true },
+  { id: 'amor-autonomia', stage: 'futuro', pillar: 5, title: 'Amor y autonomía', summary: 'Elegir compartir frente a sentir que no puedes vivir sin alguien.', kind: 'ejercicio', minutes: 8, source: 'original', exerciseId: 'amor-autonomia' },
+  { id: 'relaciones-futuras', stage: 'futuro', pillar: 5, title: 'Mis no negociables y mis banderas verdes', summary: 'Qué no quieres repetir y qué cuidado sí quieres ver en los hechos.', kind: 'ejercicio', minutes: 12, source: 'laura-pendiente', exerciseId: 'no-negociables', book: { chapter: 'IV, VI y X', pages: '73–74, 96–102, 160' }, mediaSlot: true },
 ];
 
 export type ExerciseStep =
@@ -67,6 +97,9 @@ export interface Exercise {
   intro: string;
   steps: ExerciseStep[];
   closing: string;
+  /** Paráfrasis pendiente de revisión profesional o de la autora. */
+  review?: 'pendiente';
+  quote?: { text: string; page: number };
 }
 
 export const BELIEF_SEEDS = [
@@ -78,7 +111,7 @@ export const BELIEF_SEEDS = [
   'Después de tantos años, empezar de nuevo es imposible',
 ];
 
-export const EXERCISES: Record<string, Exercise> = {
+const CORE_EXERCISES: Record<string, Exercise> = {
   apego: {
     id: 'apego',
     title: 'Preguntas sobre el apego',
@@ -191,3 +224,5 @@ export const EXERCISES: Record<string, Exercise> = {
     closing: 'Hoy no necesitas resolver toda tu vida. Solo encontrar un próximo paso.',
   },
 };
+
+export const EXERCISES: Record<string, Exercise> = { ...CORE_EXERCISES, ...BOOK_EXERCISES };

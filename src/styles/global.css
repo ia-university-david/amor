@@ -1208,6 +1208,349 @@ table.simple th {
   vertical-align: top;
 }
 
+.segmented {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+.segmented button {
+  border: 0;
+  background: transparent;
+  color: var(--text-2);
+  border-radius: 999px;
+  padding: 0.4rem 0.8rem;
+  font: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.segmented button.on,
+.segmented button[aria-pressed='true'] {
+  background: var(--lavanda);
+  color: var(--indigo-strong);
+}
+
+.winding {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.chapter-mark {
+  text-align: center;
+  margin: 1.5rem 0 0.75rem;
+}
+.chapter-mark span {
+  color: var(--text-2);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.chapter-mark h2 {
+  margin: 0.15rem 0;
+}
+.chapter-mark p {
+  margin: 0 auto;
+  max-width: 36rem;
+  color: var(--text-2);
+}
+.wind-node {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: min(100%, 460px);
+  text-decoration: none;
+  color: inherit;
+  margin: 0.35rem 0;
+}
+.wind-node.right {
+  margin-left: auto;
+  flex-direction: row-reverse;
+  text-align: right;
+}
+.wind-dot {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--lavanda);
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--indigo);
+}
+.wind-node.done .wind-dot {
+  background: var(--verde);
+  border-color: var(--verde);
+  color: var(--text);
+}
+.wind-node.here .wind-dot {
+  box-shadow: 0 0 0 4px var(--lavanda);
+  border-color: var(--indigo);
+}
+.wind-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.here-label {
+  color: var(--indigo);
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+.mini-note {
+  color: var(--text-2);
+  font-size: 0.75rem;
+}
+.list-kicker {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  margin: 0.5rem 0;
+}
+.plain-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.plain-list a {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: inherit;
+}
+.plain-list a span {
+  display: flex;
+  flex-direction: column;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+.tool-tile {
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--indigo);
+}
+.tool-tile span {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.day-ring-card {
+  text-align: center;
+}
+.day-ring {
+  width: 160px;
+  height: 160px;
+  margin: 0.5rem auto 0.75rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(var(--indigo) var(--turn), var(--lavanda) 0);
+  position: relative;
+}
+.day-ring::after {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border-radius: 50%;
+  background: var(--surface);
+}
+.day-ring strong,
+.day-ring span {
+  position: relative;
+  z-index: 1;
+}
+.day-ring strong {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+.day-ring span {
+  color: var(--text-2);
+  font-size: 0.85rem;
+}
+
+.quote-card {
+  background: var(--lavanda);
+}
+.quote-card blockquote {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+.quote-card figcaption {
+  color: var(--text-2);
+  font-size: 0.82rem;
+}
+
+.iring-wrap {
+  position: relative;
+  width: min(280px, 100%);
+  margin: 0.5rem auto 0;
+}
+.iring {
+  width: 100%;
+  height: auto;
+  transform: rotate(-90deg);
+}
+.iring-track {
+  fill: none;
+  stroke: var(--lavanda);
+  stroke-width: 14;
+}
+.iring-value {
+  fill: none;
+  stroke: var(--indigo);
+  stroke-width: 14;
+  stroke-linecap: round;
+}
+.iring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.iring-center strong {
+  font-size: 2.6rem;
+  line-height: 1;
+}
+.iring-center strong span {
+  font-size: 1rem;
+  color: var(--text-2);
+}
+.iring-center em {
+  color: var(--indigo);
+  font-style: normal;
+  font-weight: 650;
+}
+.iring-wrap input[type='range'] {
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.bubbles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.bubbles button {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  font: inherit;
+  cursor: pointer;
+  color: var(--text);
+}
+.bubbles button.on {
+  border-color: var(--indigo);
+  background: var(--lavanda);
+  box-shadow: 0 0 0 4px var(--niebla);
+}
+
+.close-screen h1 {
+  font-family: var(--font-display);
+}
+.lead {
+  font-size: 1.15rem;
+}
+
+.rule-card-pick {
+  margin-top: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+.rule-card-pick h3 {
+  font-size: 1.6rem;
+}
+
+.calendar .cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+.cal-dow {
+  text-align: center;
+  color: var(--text-2);
+  font-size: 0.75rem;
+}
+.calendar .cal-grid button {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  padding: 0.35rem 0;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--text);
+  position: relative;
+}
+.calendar .cal-grid button.on {
+  background: var(--lavanda);
+}
+.calendar .cal-grid button i {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--indigo);
+  margin: 0 auto;
+}
+
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  gap: 0.75rem;
+}
+.splash h1 {
+  margin: 0.5rem 0 0;
+}
+.splash p {
+  max-width: 28rem;
+  color: var(--text-2);
+}
+.splash .btn {
+  max-width: 320px;
+  margin-top: 0.5rem;
+}
+.splash-quiet {
+  color: var(--text-2);
+  margin-top: 0.25rem;
+}
+
+fieldset.card {
+  margin: 0;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,

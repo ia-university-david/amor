@@ -1,4 +1,6 @@
-# Amor Tóxico · Fase 1 (PWA)
+# Amor Tóxico
+
+Aplicación de acompañamiento (web progresiva + API). El recorrido de la app sigue la situación de la persona y los capítulos de *Amor tóxico*, de Laura Rojas. Cómo publicarla: [DEPLOY.md](DEPLOY.md).
 
 Aplicación web progresiva de acompañamiento emocional para amortoxico.com, con referencia editorial en el libro *Amor Tóxico* de Laura Rojas.
 
@@ -6,7 +8,7 @@ Aplicación web progresiva de acompañamiento emocional para amortoxico.com, con
 >
 > Es una herramienta de acompañamiento y educación. **No es terapia**, no hace diagnósticos y no promete recuperación en un número de días.
 
-Esta carpeta es independiente del resto del repositorio (sitio Flask). No comparte código ni dependencias con él.
+Este repositorio es solo Amor Tóxico. No comparte código con ningún otro proyecto.
 
 ## Cómo ejecutarlo
 
@@ -90,13 +92,14 @@ Copia `.env.example` a `.env.local`. **Nunca pongas claves en variables `VITE_`*
 - **Política de privacidad**: informativa, pendiente de revisión legal.
 - **Números de emergencia**: solo se muestran los generales (123 Colombia, 911 México/EE. UU., 112 España/UE) y se pide marcar el número local. No se incluyen líneas de ayuda específicas sin verificar.
 
-## Próximas fases
+## Recorrido en la app
 
-1. **Backend y datos**: API propia, `RemoteDataAdapter`, sincronización cifrada de extremo a extremo opcional, copias de seguridad.
-2. **Autenticación real**: correo con verificación, enlace mágico, Google y Apple, recuperación de cuenta y roles (editor, revisor, administrador) para `/admin`.
-3. **Proxy del asistente**: servidor que guarda la clave del LLM, *system prompt* con las reglas de este README, moderación y detección de crisis también en servidor, registro mínimo, límites de uso.
-4. **Notificaciones push** con VAPID (`PushAdapter`) y recordatorios programados en servidor.
-5. **Pagos y planes** (sección «Planes» ya preparada).
-6. **Resto de la especificación** posterior a la sección del asistente (el documento original llegó truncado en ese punto): pendiente de recibir para planificar.
-7. Migración del cuerpo de los artículos, contenido aprobado de Laura Rojas y revisión profesional del módulo educativo.
-8. Pruebas de extremo a extremo y auditorías de accesibilidad con usuarios.
+Mi Camino tiene siete capítulos según la situación (sigue en la relación, acaba de terminar, primeros días, distancia elegida, comprender, identidad, relaciones futuras). El orden sale de `orderedChapters` en `src/lib/journey.ts`. Los ejercicios del libro son paráfrasis; el capítulo autorizado de Laura se puede sustituir en el CMS con el mismo identificador (`source: laura`). Las citas cortas llevan página y el aviso de que faltan su aprobación para publicarse tal cual.
+
+Pausa, check-in, plan de protección y números de emergencia no dependen de un plan de pago.
+
+## Qué ya está en el código y qué falta por claves
+
+En el repositorio: cuentas (correo, enlace mágico, Google y Apple cuando hay claves), sincronización cifrada opcional, asistente con proxy, comunidad moderada, planes Stripe cuando hay claves, avisos push cuando hay claves VAPID, CMS, blog y SEO. Sin esas claves la app sigue funcionando en modo local o guiado. Ver `.env.example` y [DEPLOY.md](DEPLOY.md).
+
+Sigue pendiente: el texto autorizado de Laura, la revisión profesional del módulo del cerebro y de las paráfrasis, la revisión legal de la privacidad, el cuerpo migrado de algunos artículos y una auditoría de accesibilidad con personas.

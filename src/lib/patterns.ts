@@ -25,7 +25,11 @@ function isWeekend(date: Date): boolean {
  * Necessary contact (children, legal, work) is excluded from urge patterns.
  */
 export function detectPatterns(events: UrgeEvent[]): PatternInsight[] {
-  const urges = events.filter((e) => !(e.kind === 'dificil' && e.type === 'necesario'));
+  const urges = events.filter((e) => {
+    if (e.kind === 'dificil' && e.type === 'necesario') return false;
+    if (e.kind === 'checkin' && e.moment !== 'dificil') return false;
+    return true;
+  });
   if (urges.length < MIN_EVENTS_FOR_PATTERNS) return [];
   const insights: PatternInsight[] = [];
   const dates = urges.map((e) => new Date(e.at));

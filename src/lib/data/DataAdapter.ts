@@ -25,7 +25,8 @@ export type Collection =
   | 'chat'
   | 'contacts'
   | 'leads'
-  | 'reflections';
+  | 'reflections'
+  | 'identity';
 
 export const PLAIN_COLLECTIONS: ReadonlySet<Collection> = new Set(['settings', 'content', 'auth', 'sync']);
 

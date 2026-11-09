@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Icon } from '../../components/Icon';
 import { ChoiceList, EmptyState, Modal, Notice, PageHeader, formatDate } from '../../components/ui';
 import { CONTACT_MODALITIES, RULE_PRESETS, type LimitRule, type LimitsState } from '../../content/limits';
+import { RULE_CATALOG, RULE_GROUPS, groupFullySelected, setGroup, type RuleGroupId } from '../../lib/rules';
 import { newId } from '../../lib/data';
 import { EMPTY_COUNTER, daysSince, describeCounter, startCounter, stopCounter, type NoContactCounter } from '../../lib/noContact';
 import { useModuleProgress } from '../../lib/progress';
@@ -12,6 +14,8 @@ export default function Limites() {
   const { value: counter, save: saveCounter } = useDoc<NoContactCounter>('limits', 'counter', EMPTY_COUNTER);
   const { markDone } = useModuleProgress();
   const [view, setView] = useState<'cards' | 'list'>('cards');
+  const [picker, setPicker] = useState<'tarjetas' | 'lista'>('lista');
+  const [cardAt, setCardAt] = useState(0);
   const [editing, setEditing] = useState<LimitRule | null>(null);
   const [custom, setCustom] = useState('');
 
@@ -34,8 +38,8 @@ export default function Limites() {
     <div className="stack" style={{ ['--gap' as string]: '2rem' }}>
       <PageHeader
         eyebrow="Pilar 3"
-        title="Contacto cero y límites"
-        subtitle="Tú decides qué contacto quieres sostener. Los límites te cuidan; no son castigos ni prohibiciones."
+        title="La distancia que elijo"
+        subtitle="Tú decides qué contacto quieres sostener. El contacto cero es una opción. Hablar por hijos, trámites o seguridad no es un retroceso."
       />
 
       <section aria-labelledby="mod-t">
@@ -48,11 +52,13 @@ export default function Limites() {
           min={280}
         />
         {state.modality === 'proteccion' && (
-          <div style={{ marginTop: '1rem' }}>
+          <div style={{ marginTop: '1rem' }} className="stack">
             <Notice tone="warn" icon="shield">
-              Si sientes que estás en peligro, llama al número de emergencias de tu país. Un profesional o una organización de apoyo puede
-              ayudarte a preparar un plan de protección adaptado a tu situación. Guarda tus contactos de confianza en Perfil.
+              Si sientes que estás en peligro, llama al número de emergencias de tu país. Un profesional puede ayudarte a adaptar este plan. La app no bloquea a nadie ni te impide escribir.
             </Notice>
+            <Link to="/app/camino/ejercicio/proteccion" className="btn btn-outline" style={{ alignSelf: 'flex-start' }}>
+              Abrir el plan de protección
+            </Link>
           </div>
         )}
         {state.modality === 'necesarios' && (
@@ -61,6 +67,19 @@ export default function Limites() {
           </p>
         )}
       </section>
+
+      <RulePicker
+        mode={picker}
+        onMode={setPicker}
+        cardAt={cardAt}
+        onCardAt={setCardAt}
+        owned={state.rules.map((r) => r.text)}
+        onKeep={(text) => addRule(text)}
+        onDrop={(text) => {
+          const found = state.rules.find((r) => r.text === text);
+          if (found) void removeRule(found.id);
+        }}
+      />
 
       <section aria-labelledby="rules-t">
         <div className="row between">
@@ -222,6 +241,109 @@ export default function Limites() {
         </Modal>
       )}
     </div>
+  );
+}
+
+function RulePicker({
+  mode,
+  onMode,
+  cardAt,
+  onCardAt,
+  owned,
+  onKeep,
+  onDrop,
+}: {
+  mode: 'tarjetas' | 'lista';
+  onMode: (m: 'tarjetas' | 'lista') => void;
+  cardAt: number;
+  onCardAt: (n: number) => void;
+  owned: string[];
+  onKeep: (text: string) => void;
+  onDrop: (text: string) => void;
+}) {
+  const selected = RULE_CATALOG.filter((r) => owned.includes(r.text)).map((r) => r.id);
+  const deck = RULE_CATALOG.filter((r) => !owned.includes(r.text));
+  const card = deck[Math.min(cardAt, Math.max(0, deck.length - 1))];
+
+  const flip = (id: string) => {
+    const rule = RULE_CATALOG.find((r) => r.id === id);
+    if (!rule) return;
+    if (selected.includes(id)) onDrop(rule.text);
+    else onKeep(rule.text);
+  };
+
+  return (
+    <section aria-labelledby="elegir-reglas">
+      <div className="row between">
+        <div>
+          <h2 id="elegir-reglas" style={{ marginBottom: 0 }}>
+            Elige tus reglas
+          </h2>
+          <p className="small muted" style={{ margin: '0.25rem 0 0' }}>
+            Quédate con las que de verdad te cuidan. Puedes soltarlas cuando quieras.
+          </p>
+        </div>
+        <div className="segmented" role="group" aria-label="Cómo elegir">
+          <button type="button" className={mode === 'tarjetas' ? 'on' : ''} aria-pressed={mode === 'tarjetas'} onClick={() => onMode('tarjetas')}>
+            Tarjetas
+          </button>
+          <button type="button" className={mode === 'lista' ? 'on' : ''} aria-pressed={mode === 'lista'} onClick={() => onMode('lista')}>
+            Lista
+          </button>
+        </div>
+      </div>
+
+      {mode === 'tarjetas' ? (
+        card ? (
+          <div className="rule-card-pick">
+            <p className="small muted">{card.lead}</p>
+            <h3>{card.text}</h3>
+            <div className="row between">
+              <button type="button" className="btn btn-ghost" onClick={() => onCardAt(cardAt + 1 >= deck.length ? 0 : cardAt + 1)}>
+                Ahora no
+              </button>
+              <button type="button" className="btn btn-primary" onClick={() => onKeep(card.text)}>
+                Me la quedo
+              </button>
+            </div>
+          </div>
+        ) : (
+          <p className="muted">Ya revisaste las sugerencias. Puedes escribir la tuya más abajo.</p>
+        )
+      ) : (
+        <div className="stack" style={{ marginTop: '1rem' }}>
+          {RULE_GROUPS.map((g) => (
+            <fieldset key={g.id} className="card" style={{ border: '1px solid var(--border)' }}>
+              <legend className="small" style={{ padding: '0 0.4rem' }}>
+                {g.label}
+              </legend>
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                onClick={() => {
+                  const group = g.id as RuleGroupId;
+                  if (groupFullySelected(selected, group)) {
+                    for (const rule of RULE_CATALOG.filter((r) => r.group === group)) onDrop(rule.text);
+                    return;
+                  }
+                  for (const id of setGroup(selected, group, true)) {
+                    if (!selected.includes(id)) flip(id);
+                  }
+                }}
+              >
+                {groupFullySelected(selected, g.id) ? 'Quitar este grupo' : 'Quedarme con este grupo'}
+              </button>
+              {RULE_CATALOG.filter((r) => r.group === g.id).map((r) => (
+                <label key={r.id} className="check">
+                  <input type="checkbox" checked={selected.includes(r.id)} onChange={() => flip(r.id)} />
+                  <span>{r.text}</span>
+                </label>
+              ))}
+            </fieldset>
+          ))}
+        </div>
+      )}
+    </section>
   );
 }
 

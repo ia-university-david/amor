@@ -39,4 +39,18 @@ export interface DifficultEvent {
   counterReset: boolean;
 }
 
-export type UrgeEvent = PauseEvent | DifficultEvent;
+/** A quick check-in. `note` is free text and must not leave the device via sync. */
+export interface CheckInEvent {
+  kind: 'checkin';
+  id: string;
+  at: string;
+  moment: 'sostuve' | 'dificil' | 'necesario';
+  intensity: number;
+  emotion?: string;
+  note?: string;
+  dictated?: boolean;
+  counterReset: boolean;
+  trigger?: TriggerId;
+}
+
+export type UrgeEvent = PauseEvent | DifficultEvent | CheckInEvent;

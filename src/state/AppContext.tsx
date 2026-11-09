@@ -20,6 +20,8 @@ export interface Settings {
   /** `push` means reminders are delivered by the server (Web Push) instead of local timers. */
   notifications: { enabled: boolean; time: string; push?: boolean };
   installDismissed: boolean;
+  /** Pantalla de bienvenida de la app, una sola vez. */
+  splashSeen?: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -30,6 +32,7 @@ export const DEFAULT_SETTINGS: Settings = {
   consents: { memory: false, aiSensitive: false },
   notifications: { enabled: false, time: '21:00' },
   installDismissed: false,
+  splashSeen: false,
 };
 
 export interface Profile {

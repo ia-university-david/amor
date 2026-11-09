@@ -83,6 +83,7 @@ export default function Perfil() {
         {profile?.createdAt && <p className="small muted">Empezaste el {formatDate(profile.createdAt, { dateStyle: 'long' })}.</p>}
       </Section>
 
+      <h2 className="list-kicker">Preferencias</h2>
       <Section title="Apariencia y movimiento">
         <div className="field">
           <label htmlFor="theme">Tema</label>
@@ -103,6 +104,7 @@ export default function Perfil() {
         </label>
       </Section>
 
+      <h2 className="list-kicker">Cuenta y avisos</h2>
       <Section id="cuenta" title="Cuenta">
         <AccountSection />
       </Section>
@@ -111,10 +113,12 @@ export default function Perfil() {
         <RemindersSection />
       </Section>
 
+      <h2 className="list-kicker">Acompañamiento</h2>
       <Section id="contactos" title="Contactos de confianza">
         <TrustedContactsManager />
       </Section>
 
+      <h2 className="list-kicker">Privacidad</h2>
       <Section id="permisos" title="Permisos y privacidad">
         <label className="check">
           <input
@@ -171,6 +175,15 @@ export default function Perfil() {
         <BackupSection />
       </Section>
 
+      <h2 className="list-kicker">Ayuda y tus datos</h2>
+      <Section title="Ayuda">
+        <div className="stack">
+          <Link to="/contacto">Contacto</Link>
+          <Link to="/privacidad">Privacidad</Link>
+          <Link to="/comunidad/normas">Normas de la comunidad</Link>
+          <Link to="/app/planes">Planes</Link>
+        </div>
+      </Section>
       <Section title="Tus datos en este dispositivo">
         <p className="small muted" style={{ margin: 0 }}>
           Descarga una copia de todo lo que has guardado (descifrado, en formato JSON) o bórralo por completo de este dispositivo.

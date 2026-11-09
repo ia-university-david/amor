@@ -1,0 +1,458 @@
+/**
+ * Ejercicios inspirados en Amor tóxico (Laura Rojas, 2025).
+ * Paráfrasis, no capítulos pegados. Las citas cortas van aparte, con página,
+ * y siguen pendientes de la aprobación de Laura para publicarse tal cual.
+ * El texto de cada capítulo puede sustituirse desde el CMS (tipo laura).
+ */
+
+const REVIEW =
+  'Este ejercicio está inspirado en el libro y pendiente de revisión profesional y de la aprobación de Laura Rojas. No es un diagnóstico.';
+
+export const BOOK_EXERCISES = {
+  desaparecer: {
+    id: 'desaparecer',
+    title: 'Cuando empiezas a desaparecer',
+    review: 'pendiente' as const,
+    quote: { text: 'empezamos a desaparecer gradualmente, a renunciar a nosotros mismos', page: 17 },
+    intro: `${REVIEW} A veces, para que la relación siga, uno baja el volumen de lo que quiere hasta volverse casi un accesorio. Este ejercicio nombra eso, sin culparte.`,
+    steps: [
+      {
+        type: 'info' as const,
+        title: 'No es debilidad',
+        text: 'Caminar con cuidado, como sobre cáscaras de huevo, es una forma de protegerse. Notarlo es el primer paso para volver a ocuparte de ti.',
+      },
+      {
+        type: 'multi' as const,
+        id: 'areas',
+        prompt: '¿En qué partes de tu vida se nota más esta relación?',
+        options: ['Sueño', 'Trabajo o estudios', 'Amistades', 'Familia', 'Cuerpo', 'Humor', 'Dinero', 'Ganas de hacer planes'],
+      },
+      {
+        type: 'text' as const,
+        id: 'deje',
+        prompt: '¿Qué dejaste de hacer que antes era tuyo?',
+        help: 'Un hobby, una persona, una hora del día, una forma de vestirte o de hablar.',
+      },
+      {
+        type: 'text' as const,
+        id: 'volver',
+        prompt: '¿Hay una de esas cosas que puedas retomar esta semana, aunque sea diez minutos?',
+      },
+    ],
+    closing: 'Nombrar lo que quedó en pausa no te obliga a irte. Te devuelve un mapa de ti.',
+  },
+  'escuchar-me': {
+    id: 'escuchar-me',
+    title: 'Escuchar-ME',
+    review: 'pendiente' as const,
+    quote: { text: 'Escucha a tu cuerpo, no a tus argumentos', page: 45 },
+    intro: `${REVIEW} El cuerpo a veces registra tensión antes de que la mente encuentre una explicación. Es información, no una prueba ni un diagnóstico. Si un síntoma te preocupa, consúltalo con un profesional de la salud.`,
+    steps: [
+      {
+        type: 'multi' as const,
+        id: 'cuerpo',
+        prompt: 'En los últimos tiempos, ¿qué has notado en el cuerpo?',
+        options: ['Duermo peor', 'Tensión o dolor', 'Estómago', 'Palpitaciones', 'Cansancio', 'Nada distinto', 'Prefiero no responder'],
+      },
+      {
+        type: 'text' as const,
+        id: 'corazonada',
+        prompt: 'Recuerda una vez en que algo no te cuadró y lo dejaste pasar. ¿Qué pasó después?',
+      },
+      {
+        type: 'text' as const,
+        id: 'hoy',
+        prompt: 'Hoy, si pudieras hacerle caso a una señal pequeña, ¿cuál sería?',
+      },
+    ],
+    closing: 'Tu intuición merece ser escuchada junto con los hechos y con alguien de confianza. No tiene que decidir sola.',
+  },
+  'relacion-hoy': {
+    id: 'relacion-hoy',
+    title: 'Mi relación hoy',
+    review: 'pendiente' as const,
+    intro: `${REVIEW} Once miradas, inspiradas en las preguntas del capítulo IV (pp. 69–76), reescritas para esta app. Marca solo lo que reconoces. Varias marcas no ponen una etiqueta: invitan a prestar atención.`,
+    steps: [
+      {
+        type: 'multi' as const,
+        id: 'senales',
+        prompt: '¿Qué reconoces en lo que estás viviendo?',
+        options: [
+          'Los conflictos no se resuelven: vuelven igual',
+          'Hay control de mi tiempo, mi teléfono o mis amistades',
+          'Siento que no puedo ser yo',
+          'Alguien que me quiere ha mostrado preocupación',
+          'Casi siempre cedo yo',
+          'Me cuesta decir lo que siento',
+          'Dejé amigos, planes o metas',
+          'Todo avanzó muy rápido para lo que yo quería',
+          'Ha habido mentiras o promesas que no se cumplen',
+          'Ha habido insultos, amenazas, golpes, presión sexual o control del dinero',
+          'Mi salud o mi ánimo han empeorado',
+        ],
+      },
+      {
+        type: 'info' as const,
+        title: 'Cómo leerlo',
+        text: 'Si marcaste varias, hay señales que merecen tu atención. Esto no es un diagnóstico y no nombra a la otra persona. Si marcaste control, amenazas o violencia, tu seguridad va primero: usa el plan de protección y, si hace falta, el número de emergencias.',
+      },
+      {
+        type: 'text' as const,
+        id: 'una',
+        prompt: 'Elige una sola señal y escríbela como un hecho, no como un juicio.',
+        help: 'Por ejemplo: «El martes revisó mi teléfono después de que dije que no».',
+      },
+    ],
+    closing: 'Verlo por escrito no te obliga a decidir hoy. Sí te permite dejar de discutirte a ti mismo.',
+  },
+  senales: {
+    id: 'senales',
+    title: 'Señales que alertan y señales que cuidan',
+    review: 'pendiente' as const,
+    intro: `${REVIEW} Una señal de alerta es una conducta, no una identidad. Una señal que cuida es que la otra persona se interese por cómo te afecta, se haga responsable y repare.`,
+    steps: [
+      {
+        type: 'text' as const,
+        id: 'alerta',
+        prompt: 'Describe una conducta que te dejó alerta, aunque en su momento la minimizaras.',
+      },
+      {
+        type: 'text' as const,
+        id: 'verde',
+        prompt: '¿Has visto alguna vez que, después de hacerte daño, la otra persona se preocupe por ti y repare? Si no, también puedes escribir «no».',
+      },
+      {
+        type: 'choice' as const,
+        id: 'vivir',
+        prompt: 'Si esta conducta se repitiera el año que viene, ¿podrías vivir con ella?',
+        options: ['Sí, con límites claros', 'No lo sé', 'No'],
+      },
+    ],
+    closing: 'Nadie puede prometer que jamás te hará daño. Lo que sí se puede mirar es qué pasa después del daño.',
+  },
+  defender: {
+    id: 'defender',
+    title: 'Defender lo indefendible',
+    review: 'pendiente' as const,
+    intro: `${REVIEW} Cuando lo que sientes y lo que haces no coinciden, la mente busca razones: el tiempo invertido, los hijos, lo bueno que también hubo. Es humano. Darte cuenta no te obliga a irte hoy.`,
+    steps: [
+      { type: 'text' as const, id: 'siento', prompt: '¿Qué sientes cuando estás con esa persona o justo después?' },
+      { type: 'text' as const, id: 'hago', prompt: '¿Qué haces a pesar de eso? (quedarte, justificar, pedir perdón tú…)' },
+      {
+        type: 'text' as const,
+        id: 'razones',
+        prompt: '¿Qué razones usas para que las dos cosas quepan juntas?',
+        help: '«Llevamos años», «no todo es malo», «si me esfuerzo…». Escríbelas sin juzgarte.',
+      },
+      {
+        type: 'info' as const,
+        title: 'Tres caminos',
+        text: 'Puedes cambiar lo que haces, cambiar lo que crees, o añadir más justificaciones. Los dos últimos alivian un rato y suelen dejarte en el mismo lugar. No tienes que elegir ahora.',
+      },
+    ],
+    closing: 'Ver la distancia entre lo que sientes y lo que haces ya es un acto de claridad.',
+  },
+  'dice-hace': {
+    id: 'dice-hace',
+    title: 'Lo que dice y lo que hace',
+    review: 'pendiente' as const,
+    intro: `${REVIEW} Las palabras importan. Los hechos, repetidos, importan más. Esto no sirve para condenar a nadie: sirve para que tú veas el patrón.`,
+    steps: [
+      { type: 'text' as const, id: 'dice', prompt: 'Escribe una promesa o una frase que te dicen a menudo.' },
+      { type: 'text' as const, id: 'hace', prompt: '¿Qué ocurre después, en los hechos?' },
+      {
+        type: 'text' as const,
+        id: 'cuando',
+        prompt: 'Completa: «Cuando ____, entonces todo va a cambiar». ¿Esa condición ya se cumplió alguna vez?',
+      },
+    ],
+    closing: 'La esperanza puede ser real. También puede disfrazar una espera que ya dura demasiado. Las dos cosas pueden ser verdad a la vez.',
+  },
+  consejo: {
+    id: 'consejo',
+    title: 'El consejo que le darías a alguien que quieres',
+    review: 'pendiente' as const,
+    intro: `${REVIEW} A veces vemos con más claridad la vida de alguien a quien queremos que la nuestra. Esta carta es para ti. No se envía.`,
+    steps: [
+      {
+        type: 'text' as const,
+        id: 'carta',
+        prompt: 'Si alguien que quieres te contara exactamente lo que estás viviendo, ¿qué le dirías, con cariño y sin órdenes?',
+      },
+      { type: 'text' as const, id: 'hoy', prompt: 'De ese consejo, ¿qué parte sí te aplicarías esta semana, aunque sea pequeña?' },
+    ],
+    closing: 'Tratarte como tratarías a alguien que quieres no es un premio. Es el punto de partida.',
+  },
+  anclas: {
+    id: 'anclas',
+    title: 'Lo que me ancla',
+    review: 'pendiente' as const,
+    intro: `${REVIEW} Quedarse tiene razones respetables: miedo, hijos, dinero, cariño, vergüenza, costumbre. Mirarlas una a una no es rendirse. Es ver qué apoyo haría falta.`,
+    steps: [
+      {
+        type: 'multi' as const,
+        id: 'anclas',
+        prompt: '¿Qué te sostiene hoy en este lugar?',
+        options: [
+          'Sigo queriendo a esa persona',
+          'Miedo a su reacción',
+          'Hijos o familia',
+          'Dinero o vivienda',
+          'Vergüenza de contar lo que pasa',
+          'Lo conocido da menos miedo que lo nuevo',
+          'Espero que cambie',
+          'Otra razón',
+        ],
+      },
+      { type: 'text' as const, id: 'apoyo', prompt: 'Para la razón que más pesa, ¿qué apoyo concreto la haría más llevadera?' },
+    ],
+    closing: 'Ninguna de estas razones te hace débil. Nombrarlas ayuda a pedir ayuda con más precisión.',
+  },
+  preparar: {
+    id: 'preparar',
+    title: 'Preparar una conversación',
+    review: 'pendiente' as const,
+    intro: `${REVIEW} Lo que necesitas decir se escribe mejor en calma. Llevarlo a una conversación no garantiza que te escuchen. Si hablar puede ponerte en riesgo, prioriza tu seguridad y no fuerces el encuentro.`,
+    steps: [
+      { type: 'text' as const, id: 'decir', prompt: '¿Qué necesitas decir, en dos o tres frases amables y concretas?' },
+      { type: 'text' as const, id: 'cuando', prompt: '¿En qué momento del día estás más en calma para decirlo, si es seguro hacerlo?' },
+      {
+        type: 'text' as const,
+        id: 'despues',
+        prompt: 'Si la otra persona no escucha, ¿qué harás tú para cerrar la conversación y cuidarte?',
+      },
+    ],
+    closing: 'Esperar a que se enfríe la cabeza no es huir. Es darle a tus palabras una oportunidad de salir enteras.',
+  },
+  proteccion: {
+    id: 'proteccion',
+    title: 'Plan de protección y salida',
+    review: 'pendiente' as const,
+    intro: `${REVIEW} Si hay control, amenazas o miedo a la reacción de la otra persona, tu seguridad va primero. Este plan es privado. No sustituye a un profesional, a un abogado ni a una llamada de emergencia. La app nunca bloquea ni impide que contactes a nadie.`,
+    steps: [
+      {
+        type: 'info' as const,
+        title: 'Si estás en peligro ahora',
+        text: 'Llama al número de emergencias de tu país (123 en Colombia, 911 en México o EE. UU., 112 en España y la UE) o busca a alguien de confianza que pueda estar contigo.',
+      },
+      {
+        type: 'multi' as const,
+        id: 'lista',
+        prompt: 'Marca lo que ya tienes o lo que quieres preparar. Lo que no aplique, déjalo.',
+        options: [
+          'Alguien de confianza sabe dónde estoy',
+          'Tengo a mano documentos importantes',
+          'Sé a dónde podría ir si necesitara salir',
+          'Tengo un poco de dinero o una forma de moverme',
+          'Los números de emergencia están guardados',
+          'Un profesional o una organización de apoyo conoce la situación',
+        ],
+      },
+      {
+        type: 'text' as const,
+        id: 'primero',
+        prompt: 'Si tuvieras que salir hoy, ¿cuál sería el primer paso más pequeño y seguro?',
+        help: 'No escribas direcciones si compartes este dispositivo.',
+      },
+    ],
+    closing: 'Un plan no es una fecha límite. Es una forma de no estar solo con el miedo. Puedes volver y ajustarlo.',
+  },
+  'lo-que-paso': {
+    id: 'lo-que-paso',
+    title: 'Lo que sí pasó',
+    review: 'pendiente' as const,
+    intro: `${REVIEW} Con la distancia, la memoria se queda a menudo con lo bueno. Este registro es para el cuadro completo, no para castigarte ni para odiar a nadie.`,
+    steps: [
+      { type: 'text' as const, id: 'bueno', prompt: '¿Qué sí fue valioso y no quieres negar?' },
+      { type: 'text' as const, id: 'dano', prompt: '¿Qué sí pasó y no quieres volver a minimizar?' },
+      { type: 'text' as const, id: 'leer', prompt: 'Escribe una frase que quieras leer cuando el recuerdo se ponga demasiado bonito.' },
+    ],
+    closing: 'Puedes extrañar y, al mismo tiempo, recordar por qué te cuidas.',
+  },
+  botiquin: {
+    id: 'botiquin',
+    title: 'Mi botiquín',
+    review: 'pendiente' as const,
+    intro: `${REVIEW} Una lista corta de lo que te ayuda en un día malo, para no tener que inventarlo en el peor momento.`,
+    steps: [
+      {
+        type: 'multi' as const,
+        id: 'lista',
+        prompt: '¿Qué puedes tener a mano?',
+        options: ['Caminar', 'Ducharme', 'Llamar a alguien de confianza', 'Música', 'Comer algo', 'Escribir aquí', 'Respirar dos minutos', 'Salir de la habitación'],
+      },
+      { type: 'text' as const, id: 'primera', prompt: '¿Cuál de estas usarías primero la próxima vez que apriete?' },
+    ],
+    closing: 'El botiquín no arregla la vida. Te evita quedarte sin nada cuando el impulso llega.',
+  },
+  duelo: {
+    id: 'duelo',
+    title: 'Duelo y emociones permitidas',
+    review: 'pendiente' as const,
+    quote: { text: 'Una ruptura no es necesariamente un fracaso', page: 56 },
+    intro: `${REVIEW} Se puede hacer duelo de alguien que sigue vivo, y también de la vida que imaginaste. No hay un orden obligatorio de emociones.`,
+    steps: [
+      {
+        type: 'multi' as const,
+        id: 'emociones',
+        prompt: '¿Qué está presente hoy? Puedes marcar más de una.',
+        options: ['Tristeza', 'Alivio', 'Rabia', 'Nostalgia', 'Miedo', 'Culpa', 'Vacío', 'Esperanza'],
+      },
+      { type: 'text' as const, id: 'despido', prompt: '¿Qué estás despidiendo, además de a la persona? (una rutina, un plan, una idea de ti)' },
+    ],
+    closing: 'Que convivan el alivio y la tristeza no significa que estés haciéndolo mal.',
+  },
+  piano: {
+    id: 'piano',
+    title: 'La culpa que ayuda y la que solo pesa',
+    review: 'pendiente' as const,
+    quote: { text: 'cuando uno no gana, aprende.', page: 47 },
+    intro: `${REVIEW} Hay una culpa que invita a reparar y otra que se carga como un piano, a todas partes, sin servir. Lo que otra persona hizo no es tu culpa.`,
+    steps: [
+      { type: 'text' as const, id: 'pesa', prompt: '¿De qué te culpas hoy?' },
+      {
+        type: 'choice' as const,
+        id: 'tipo',
+        prompt: 'Esa culpa, ¿te ayuda a cuidar algo concreto o solo te castiga?',
+        options: ['Me ayuda a reparar o a cuidarme', 'Solo pesa', 'Un poco de las dos'],
+      },
+      { type: 'text' as const, id: 'soltar', prompt: 'Si pudieras bajar el piano un momento, ¿qué frase te dirías?' },
+    ],
+    closing: 'No es tu culpa lo que te hicieron. Sí está en tus manos cómo te cuidas a partir de ahora.',
+  },
+  abc: {
+    id: 'abc',
+    title: 'Patrones: el A-B-C',
+    review: 'pendiente' as const,
+    intro: `${REVIEW} A es lo que pasó, B es lo que te dijiste, C es lo que sentiste e hiciste. Mirar tu parte no significa que el daño haya sido tu culpa. Si hay maltrato, la responsabilidad de esa conducta es de quien la ejerce.`,
+    steps: [
+      { type: 'text' as const, id: 'a', prompt: 'A. ¿Qué pasó, en hechos breves?' },
+      { type: 'text' as const, id: 'b', prompt: 'B. ¿Qué te dijiste en ese momento?' },
+      { type: 'text' as const, id: 'c', prompt: 'C. ¿Qué sentiste y qué hiciste?' },
+      { type: 'text' as const, id: 'otra', prompt: 'Si este patrón se ha repetido, ¿qué te gustaría hacer distinto la próxima vez, sin exigirte perfección?' },
+    ],
+    closing: 'Darse cuenta ya es mover la inercia. No tienes que cambiar toda tu historia en un ejercicio.',
+  },
+  'me-pierdo': {
+    id: 'me-pierdo',
+    title: '¿Me pierdo cuidando?',
+    review: 'pendiente' as const,
+    intro: `${REVIEW} Cuidar a otros es valioso. Perderte en ese cuidado —decir siempre que sí, sentirte responsable de lo que el otro hace, no pedir ayuda— merece una mirada. No es un diagnóstico ni una etiqueta.`,
+    steps: [
+      {
+        type: 'multi' as const,
+        id: 'rasgos',
+        prompt: '¿Qué reconoces en ti, sin convertirlo en una sentencia?',
+        options: [
+          'Me cuesta decir que no',
+          'Me siento responsable del ánimo de la otra persona',
+          'Pido perdón para que pase la tormenta',
+          'Dejo mis planes si el otro está mal',
+          'Me da miedo que se enojen conmigo',
+          'Me cuesta pedir ayuda',
+          'Creo que si me esfuerzo lo suficiente, cambiará',
+        ],
+      },
+      { type: 'text' as const, id: 'micro', prompt: 'Esta semana, ¿qué «no» pequeño o qué pedido de ayuda te permitirías?' },
+    ],
+    closing: 'Si no te cuidas, no te queda de dónde dar. Priorizarte no es egoísmo.',
+  },
+  gustos: {
+    id: 'gustos',
+    title: 'Yo no sé qué me gusta',
+    review: 'pendiente' as const,
+    intro: `${REVIEW} Después de mucho tiempo pendiente de otra persona, es frecuente no saber qué te gusta. Suele ser temporal. Empieza por listas cortas.`,
+    steps: [
+      { type: 'text' as const, id: 'gusta', prompt: 'Tres cosas que te gustan, aunque parezcan pequeñas.' },
+      { type: 'text' as const, id: 'no', prompt: 'Algo que ya no quieres aceptar.' },
+      { type: 'text' as const, id: 'miedo', prompt: 'Algo que te da miedo recuperar.' },
+      { type: 'text' as const, id: 'anhelo', prompt: 'Algo que anhelas, sin fecha.' },
+    ],
+    closing: 'No tienes que reconstruirte entera hoy. Una lista corta ya es una identidad en marcha.',
+  },
+  'amar-me': {
+    id: 'amar-me',
+    title: 'Amar-ME y cuidar-ME',
+    review: 'pendiente' as const,
+    quote: { text: 'El amor propio es una conversación íntima y honesta con nosotros mismos, no con los demás.', page: 57 },
+    intro: `${REVIEW} El amor propio, aquí, no es ego ni una pose. Es una conversación honesta contigo y un cuidado concreto del cuerpo.`,
+    steps: [
+      {
+        type: 'multi' as const,
+        id: 'indicadores',
+        prompt: 'Sin nota ni examen: ¿qué sí reconoces hoy?',
+        options: [
+          'Sé nombrar algo que hago bien',
+          'Tengo al menos una relación donde puedo ser yo',
+          'Mis expectativas sobre mí no son de perfección',
+          'Puedo decir una necesidad en voz alta',
+        ],
+      },
+      { type: 'text' as const, id: 'amable', prompt: '¿Qué le dirías a alguien que quieres si se hablara como tú te hablas hoy?' },
+      { type: 'text' as const, id: 'cuerpo', prompt: 'Una forma concreta de cuidarte esta semana: comer, dormir, moverte o salir a un lugar que te siente bien.' },
+    ],
+    closing: 'Fallar en algún indicador no es una sentencia. Reconocerlo ya es cuidarte.',
+  },
+  perdon: {
+    id: 'perdon',
+    title: 'Perdonarte, si tú lo eliges',
+    review: 'pendiente' as const,
+    quote: { text: 'perdonar y olvidar son dos cosas muy distintas', page: 153 },
+    intro: `${REVIEW} Perdonar es opcional. No es justificar, ni reconciliarte, ni volver a escribir, ni olvidar. Puedes saltarte este ejercicio y seguir tu camino igual.`,
+    steps: [
+      {
+        type: 'choice' as const,
+        id: 'quiero',
+        prompt: '¿Quieres hacer este ejercicio hoy?',
+        options: ['Sí, quiero mirar el perdón hacia mí', 'Hoy no, y está bien'],
+      },
+      {
+        type: 'text' as const,
+        id: 'carta',
+        prompt: 'Si elegiste que sí: escríbete unas líneas de perdón, como se las escribirías a alguien que quieres. Si elegiste que no, escribe «hoy no» y sigue.',
+      },
+    ],
+    closing: 'Soltar un peso no le da la razón a nadie. Tampoco te obliga a olvidar.',
+  },
+  'no-negociables': {
+    id: 'no-negociables',
+    title: 'Mis no negociables y mis banderas verdes',
+    review: 'pendiente' as const,
+    intro: `${REVIEW} Para más adelante, o para la relación en la que estás si decides seguir: qué no estás dispuesto a repetir y qué sí quieres ver en los hechos.`,
+    steps: [
+      { type: 'text' as const, id: 'no', prompt: 'Tres cosas que no quieres volver a aceptar.' },
+      {
+        type: 'text' as const,
+        id: 'verde',
+        prompt: 'Tres señales de cuidado que sí quieres ver: responsabilidad, reparación, respeto a un no, coherencia entre lo que se dice y lo que se hace…',
+      },
+      { type: 'text' as const, id: 'plan', prompt: 'Si aparece una señal de alerta, ¿a quién se lo contarías y qué harías en las siguientes 24 horas?' },
+    ],
+    closing: 'Un vínculo sano no es uno donde nunca hay daño. Es uno donde, cuando lo hay, importa cómo te afecta y hay reparación.',
+  },
+  'lo-permiti': {
+    id: 'lo-permiti',
+    title: 'Lo que permití y lo que ya no',
+    review: 'pendiente' as const,
+    quote: { text: 'Amarnos y priorizarnos no es egoísmo, es regla básica de supervivencia.', page: 102 },
+    intro: `${REVIEW} Lo que se tolera una y otra vez tiende a instalarse. Mirar lo que permitiste no es decir que provocaste el daño. Es elegir un límite hacia adelante.`,
+    steps: [
+      { type: 'text' as const, id: 'permiti', prompt: 'Algo que toleraste y que ya no quieres que sea la norma.' },
+      { type: 'text' as const, id: 'limite', prompt: 'Tradúcelo a un límite concreto, en una frase que tú puedas sostener.' },
+    ],
+    closing: 'Un límite es una forma de quererte. No es un castigo para la otra persona.',
+  },
+  'como-empezo': {
+    id: 'como-empezo',
+    title: 'Cómo empezó',
+    review: 'pendiente' as const,
+    quote: { text: 'La ilusión del amor ideal es un enemigo tremendo de hombres y mujeres por igual.', page: 31 },
+    intro: `${REVIEW} Al principio casi todo el mundo muestra su mejor versión. Que no vieras el resto no te hace ingenuo: la atención se queda con lo que confirma lo que queremos creer.`,
+    steps: [
+      { type: 'text' as const, id: 'principio', prompt: '¿Qué te enamoró o te enganchó al principio?' },
+      { type: 'text' as const, id: 'rapido', prompt: '¿Hubo prisa por ponerle nombre, por convivir o por mostrarlo?' },
+      { type: 'text' as const, id: 'despues', prompt: '¿Qué apareció después que al principio no se veía?' },
+    ],
+    closing: 'Entender el principio no borra lo que sentiste. Te ayuda a no pedirte haberlo sabido todo desde el día uno.',
+  },
+};

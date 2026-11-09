@@ -4,8 +4,10 @@ import {
   labelOf,
   type OnboardingAnswers,
 } from '../content/onboarding';
+import type { ChapterId } from '../content/chapters';
 import type { PillarId } from '../content/program';
 import type { ToolId } from '../content/tools';
+import { contactMode, orderedChapters, type ContactMode } from './journey';
 
 export interface PlanActivity {
   title: string;
@@ -22,6 +24,10 @@ export interface InitialPlan {
   firstActivity: PlanActivity;
   assistantNote: string;
   focusPillars: PillarId[];
+  /** Capítulos de Mi Camino, ordenados según la situación. El primero es «Empieza aquí». */
+  focusChapters: ChapterId[];
+  /** Cómo se habla del contacto: dentro de la relación, necesario, voluntario o sin definir. */
+  contactMode: ContactMode;
   /** True when the person mentioned violence or threats: show safety resources. */
   showSafety: boolean;
   /** True when contact cannot simply stop (children, work, legal...). */
@@ -199,6 +205,8 @@ export function generatePlan(answers: OnboardingAnswers): InitialPlan {
     assistantNote:
       'Si quieres hablar, el asistente está disponible. Es una inteligencia artificial de acompañamiento, no una persona ni un terapeuta.',
     focusPillars: focusPillars(answers),
+    focusChapters: orderedChapters(answers),
+    contactMode: contactMode(answers),
     showSafety,
     necessaryContact,
   };

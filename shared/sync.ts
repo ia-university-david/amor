@@ -32,8 +32,8 @@ function omit(v: Obj, keys: string[]): Obj {
 }
 
 const PROFILE_KEYS = ['name', 'country', 'language', 'adultConfirmed', 'createdAt', 'plan'];
-const SETTINGS_KEYS = ['theme', 'reducedMotion', 'onboardingComplete', 'consents', 'notifications'];
-const EVENT_FREE_TEXT = ['learning', 'reflection', 'nextStrategy', 'seeking'];
+const SETTINGS_KEYS = ['theme', 'reducedMotion', 'onboardingComplete', 'consents', 'notifications', 'splashSeen'];
+const EVENT_FREE_TEXT = ['learning', 'reflection', 'nextStrategy', 'seeking', 'note'];
 
 /**
  * Returns the value that may be sent to the server for this record, or

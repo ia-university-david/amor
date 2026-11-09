@@ -28,6 +28,8 @@ export const TOPIC_LABELS: Record<AssistantTopic, string> = {
   celos: 'Siento celos',
   dormir: 'No puedo dormir',
   limites: 'Quiero poner límites',
+  decidir: 'Estoy pensando si quedarme o irme',
+  dudar: 'Dudo de lo que viví',
 };
 
 const TOPIC_REPLIES: Record<AssistantTopic, { text: string; suggestions: Suggestion[] }> = {
@@ -52,7 +54,7 @@ const TOPIC_REPLIES: Record<AssistantTopic, { text: string; suggestions: Suggest
     suggestions: [S.diario, S.avances],
   },
   culpa: {
-    text: 'La culpa aparece a menudo después de una ruptura, incluso cuando no todo dependía de ti. Hiciste lo que pudiste con lo que sabías en ese momento. ¿Quieres mirar ese pensamiento con más calma?',
+    text: 'La culpa aparece mucho después de una relación así. Una parte puede ayudarte a aprender; otra solo pesa. Lo que otra persona hizo no es tu culpa. ¿Quieres mirar con calma qué parte te sirve y cuál no?',
     suggestions: [S.creencias, S.diario],
   },
   soledad: {
@@ -71,6 +73,14 @@ const TOPIC_REPLIES: Record<AssistantTopic, { text: string; suggestions: Suggest
     text: 'Poner límites es una forma de cuidarte, no de castigar a nadie. Puedes empezar por uno solo, el que sientas más posible de sostener.',
     suggestions: [S.limites],
   },
+  decidir: {
+    text: 'Es una decisión difícil y no tienes que tomarla hoy. Una pregunta que ayuda: si alguien que quieres te contara exactamente esto, ¿qué le dirías?',
+    suggestions: [S.diario, S.limites],
+  },
+  dudar: {
+    text: 'Cuando alguien pone en duda lo que viviste una y otra vez, es normal empezar a desconfiar de tu memoria. Escribir lo que pasó, en calma, puede ayudarte a ordenar los hechos. No es un diagnóstico de nadie.',
+    suggestions: [S.diario, S.cerebro],
+  },
 };
 
 const KEYWORDS: [AssistantTopic, RegExp][] = [
@@ -82,6 +92,8 @@ const KEYWORDS: [AssistantTopic, RegExp][] = [
   ['pensamientos', /\b(no puedo dejar de pensar|pienso todo el tiempo|vueltas|obsesion|pensando en)/],
   ['entender', /\b(entender|por que me pasa|porque me pasa|cerebro|no entiendo)/],
   ['limites', /\b(limite|limites|contacto cero)/],
+  ['decidir', /\b(me quedo|irme|dejarlo|dejarla|separarme|no se si quedarme|no sé si quedarme)/],
+  ['dudar', /\b(dudo de|me dijo que estoy loc|gaslight|no se si paso|no sé si pasó|invente)/],
   ['mejor', /\b(mejor|bien hoy|tranquila|tranquilo)\b/],
   ['tristeza', /\b(triste|tristeza|llorar|lloro|extrano|vacio)/],
 ];
