@@ -1,0 +1,43 @@
+{
+  "id": "/",
+  "name": "Amor Tóxico · Volver a ti",
+  "short_name": "Amor Tóxico",
+  "description": "Acompañamiento para comprender lo que sientes, manejar los impulsos y reconstruir tu vida después de una relación que te hizo daño.",
+  "lang": "es",
+  "dir": "ltr",
+  "start_url": "/app?origen=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#FAFAFC",
+  "theme_color": "#6255D9",
+  "categories": ["health", "lifestyle", "education"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Necesito una pausa",
+      "short_name": "Pausa",
+      "description": "Abrir la pausa guiada",
+      "url": "/app/pausa?origen=atajo",
+      "icons": [{ "src": "/icons/shortcut-pausa.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Hoy fue difícil",
+      "short_name": "Hoy fue difícil",
+      "url": "/app/dificil?origen=atajo",
+      "icons": [{ "src": "/icons/shortcut-pausa.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Mi diario",
+      "short_name": "Diario",
+      "url": "/app/espacio?seccion=diario&origen=atajo",
+      "icons": [{ "src": "/icons/shortcut-pausa.png", "sizes": "96x96", "type": "image/png" }]
+    }
+  ]
+}

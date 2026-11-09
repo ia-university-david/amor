@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FAFAFC" />
+    <title>Sin conexión · Amor Tóxico</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 1.5rem;
+        font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        background: radial-gradient(700px 360px at 80% -10%, #EDEBFF, transparent 70%), #FAFAFC; color: #202338;
+      }
+      main { max-width: 420px; text-align: center; }
+      h1 { font-family: 'Iowan Old Style', Palatino, Georgia, serif; font-weight: 600; font-size: 1.9rem; margin: 1.25rem 0 0.5rem; }
+      p { color: #667085; line-height: 1.6; }
+      .card { background: #fff; border: 1px solid #E6E5EF; border-radius: 20px; padding: 1.25rem; margin-top: 1.5rem; text-align: left; }
+      .card strong { color: #202338; }
+      a.btn, button { display: inline-block; margin-top: 1.25rem; background: #6255D9; color: #fff; border: 0; border-radius: 999px; padding: 0.85rem 1.4rem; font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; }
+      @media (prefers-color-scheme: dark) {
+        body { background: #12131C; color: #ECEAF6; }
+        .card { background: #1B1D2A; border-color: #2D3045; }
+        .card strong { color: #ECEAF6; }
+        p { color: #A9ADC2; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img src="/logo.svg" width="64" height="64" alt="" />
+      <h1>Estás sin conexión</h1>
+      <p>No pasa nada. Tu espacio sigue aquí y tus datos están guardados en tu dispositivo.</p>
+      <div class="card">
+        <p><strong>Mientras vuelve la conexión</strong></p>
+        <p>Apoya los pies en el suelo. Nombra cinco cosas que puedes ver, cuatro que puedes tocar y tres que puedes oír.</p>
+        <p>Puedes sentir el impulso sin actuar inmediatamente.</p>
+      </div>
+      <a class="btn" href="/app/pausa">Abrir la pausa</a>
+      <p style="font-size: 0.85rem; margin-top: 1.5rem">Si estás en peligro, llama al número de emergencias de tu país.</p>
+    </main>
+  </body>
+</html>

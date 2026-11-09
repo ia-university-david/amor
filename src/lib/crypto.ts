@@ -10,7 +10,7 @@
  */
 
 export interface EncryptedPayload {
-  iv: Uint8Array;
+  iv: Uint8Array<ArrayBuffer>;
   data: ArrayBuffer;
 }
 

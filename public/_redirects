@@ -1,0 +1,9 @@
+# Netlify / Cloudflare Pages style rules.
+# Preserve the URLs of the previous amortoxico.com site.
+/vsl              /test            301
+/vsl/             /test            301
+/blog/            /blog            301
+/guia-72-horas/   /guia-72-horas   301
+
+# Single-page app fallback (must stay last).
+/*                /index.html      200
