@@ -1,48 +1,110 @@
+/* Bebas Neue, Open Sans e Inter: SIL Open Font License. Ver public/fonts/OFL.txt */
+@font-face {
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/bebas-neue-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/bebas-neue-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/open-sans-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/open-sans-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
-  --bg: #fafafc;
+  /* Paleta tomada de amortoxico.com (CSS :root, hsl → hex). */
+  --bg: #f9f7f5; /* background 30 25% 97% */
   --surface: #ffffff;
-  --surface-2: #f3f2f9;
-  --indigo: #6255d9;
-  --indigo-strong: #4c40c2;
-  --lavanda: #edebff;
-  --niebla: #eaf3ff;
-  --coral: #f4a5a6;
-  --coral-soft: #fdeeee;
-  --verde: #bce9d5;
-  --verde-soft: #e9f8f1;
-  --text: #202338;
-  --text-2: #667085;
-  --border: #e6e5ef;
-  --focus: #6255d9;
+  --surface-2: #f1ebe4; /* warm-beige 32 30% 92% */
+  --wine: #6e3543; /* wine-dark 345 35% 32% */
+  --wine-deep: #542833;
+  --gold: #d49235; /* gold 35 65% 52% */
+  --gold-ink: #7a541c;
+  --on-accent: #f9f7f5;
+  /* El acento interactivo era índigo (#6255d9). Ahora es el vino del sitio original. */
+  --indigo: var(--wine);
+  --indigo-strong: var(--wine-deep);
+  --lavanda: #f6eef1; /* blush 340 30% 95% */
+  --niebla: #f1ebe4;
+  --coral: #d49235;
+  --coral-soft: #f8efe3;
+  --verde: #7b9d8c; /* sage 150 15% 55% */
+  --verde-soft: #ebf4ee;
+  --text: #38332e; /* foreground 30 10% 20% */
+  --text-2: #6b625a;
+  --border: #e4e0dd; /* border 30 12% 88% */
+  --focus: #6e3543;
   --danger: #b4232f;
-  --shadow: 0 1px 2px rgba(32, 35, 56, 0.04), 0 8px 24px rgba(32, 35, 56, 0.06);
+  --shadow: 0 4px 24px rgba(120, 100, 80, 0.06);
   --radius: 20px;
   --radius-sm: 12px;
-  --font: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font: 'Open Sans', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Bebas Neue', 'Arial Narrow', Impact, sans-serif;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --nav-h: 68px;
   color-scheme: light;
 }
 
 :root[data-theme='dark'] {
-  --bg: #12131c;
-  --surface: #1b1d2a;
-  --surface-2: #232538;
-  --indigo: #9d94ff;
-  --indigo-strong: #b8b1ff;
-  --lavanda: #2a2750;
-  --niebla: #1d2a3d;
-  --coral: #f4a5a6;
-  --coral-soft: #3a2328;
-  --verde: #6fcfa6;
-  --verde-soft: #183229;
-  --text: #eceaf6;
-  --text-2: #a9adc2;
-  --border: #2d3045;
-  --focus: #b8b1ff;
+  --bg: #151413; /* black-soft 30 5% 8% */
+  --surface: #211c1a;
+  --surface-2: #2c2623;
+  --wine: #f0c9d2;
+  --wine-deep: #f7e0e6;
+  --gold: #ebb870; /* gold-light 35 75% 68% */
+  --gold-ink: #ebb870;
+  --on-accent: #151413;
+  --indigo: var(--wine);
+  --indigo-strong: var(--wine-deep);
+  --lavanda: #3a2830;
+  --niebla: #2a2420;
+  --coral: #ebb870;
+  --coral-soft: #3a2e22;
+  --verde: #9dc4b0;
+  --verde-soft: #1a2b24;
+  --text: #f8f5f1;
+  --text-2: #d7cbbf;
+  --border: #3c3530;
+  --focus: #ebb870;
   --danger: #ff8a93;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.28);
   color-scheme: dark;
 }
 
@@ -80,13 +142,15 @@ h4 {
 h1 {
   font-size: clamp(1.8rem, 4vw, 2.6rem);
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 400;
+  letter-spacing: 0.04em;
 }
 
 h2 {
   font-size: clamp(1.35rem, 2.6vw, 1.8rem);
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 400;
+  letter-spacing: 0.03em;
 }
 
 h3 {
@@ -131,7 +195,7 @@ svg {
   left: 1rem;
   top: -100px;
   background: var(--indigo);
-  color: #fff;
+  color: var(--on-accent);
   padding: 0.6rem 1rem;
   border-radius: var(--radius-sm);
   z-index: 100;
@@ -215,12 +279,8 @@ svg {
 
 .btn-primary {
   background: var(--indigo);
-  color: #fff;
-  box-shadow: 0 6px 16px rgba(98, 85, 217, 0.28);
-}
-
-:root[data-theme='dark'] .btn-primary {
-  color: #14122b;
+  color: var(--on-accent);
+  box-shadow: 0 6px 16px rgba(110, 53, 67, 0.28);
 }
 
 .btn-primary:hover {
@@ -526,7 +586,7 @@ textarea:focus {
 .progress > span {
   display: block;
   height: 100%;
-  background: linear-gradient(90deg, var(--indigo), #8f85f0);
+  background: linear-gradient(90deg, var(--indigo), var(--gold));
   border-radius: inherit;
   transition: width 0.5s var(--ease);
 }
@@ -539,7 +599,7 @@ textarea:focus {
 .intensity output {
   display: block;
   font-size: 3.5rem;
-  font-weight: 700;
+  font-weight: 400;
   font-family: var(--font-display);
   color: var(--indigo);
   line-height: 1;
@@ -584,8 +644,17 @@ textarea:focus {
   gap: 0.6rem;
   color: var(--text);
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 1.05rem;
+  flex-shrink: 0;
+}
+
+.brand span {
+  font-family: var(--font-display);
+  letter-spacing: 0.08em;
+  font-size: 1.35rem;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .public-nav {
@@ -610,13 +679,9 @@ textarea:focus {
 
 .public-nav a.btn-primary,
 .public-nav a.btn-primary:hover {
-  color: #fff;
+  color: var(--on-accent);
   background: var(--indigo);
   margin-left: 0.25rem;
-}
-
-:root[data-theme='dark'] .public-nav a.btn-primary {
-  color: #14122b;
 }
 
 .public-nav a.active:not(.btn) {
@@ -654,42 +719,223 @@ textarea:focus {
 }
 
 .hero {
-  padding: clamp(3rem, 9vw, 6.5rem) 0 clamp(2.5rem, 6vw, 4.5rem);
-  background:
-    radial-gradient(800px 400px at 85% -10%, var(--lavanda), transparent 70%),
-    radial-gradient(600px 300px at -10% 110%, var(--niebla), transparent 70%);
+  padding: 0 0 clamp(2.5rem, 6vw, 4.5rem);
+  background: linear-gradient(180deg, #f1ebe4 0%, var(--bg) 100%);
+  text-align: center;
+}
+
+:root[data-theme='dark'] .hero {
+  background: linear-gradient(180deg, #2a2420 0%, var(--bg) 100%);
 }
 
 .hero h1 {
-  font-size: clamp(2.2rem, 6vw, 3.8rem);
-  max-width: 14ch;
+  font-size: clamp(2.6rem, 7vw, 4.5rem);
+  max-width: 18ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero .lead {
-  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
   color: var(--text-2);
-  max-width: 46ch;
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.hero-grid {
+.hero-copy .row {
+  justify-content: center;
+}
+
+.brand-reels {
+  display: flex;
+  gap: 0.85rem;
+  overflow-x: auto;
+  padding: 1.15rem 1rem 0.35rem;
+  scroll-snap-type: x mandatory;
+}
+
+.brand-reels a {
+  flex: 0 0 148px;
+  scroll-snap-align: start;
+  border-radius: 18px;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.brand-reels img {
+  width: 148px;
+  height: 262px;
+  object-fit: cover;
+  display: block;
+}
+
+.brand-wordmark {
+  width: min(100%, 520px);
+  height: auto;
+  margin: 1.4rem auto 0.2rem;
+  mix-blend-mode: multiply;
+}
+
+:root[data-theme='dark'] .brand-wordmark {
+  mix-blend-mode: normal;
+  filter: invert(1);
+}
+
+.brand-tiles {
   display: grid;
-  gap: 2.5rem;
-  align-items: center;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1.75rem;
 }
 
-@media (max-width: 860px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
+.brand-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 108px;
+  padding: 0.9rem 0.55rem;
+  border-radius: 18px;
+  text-decoration: none;
+  color: #38332e;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.25;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.brand-tile:hover {
+  transform: translateY(-2px);
+}
+
+.tile-amazon { background: #f8f4ef; }
+.tile-test { background: #f6eef1; }
+.tile-whatsapp { background: #ebf4ee; }
+.tile-guide { background: #f0f1f5; }
+.tile-ebook { background: #f2f2f2; }
+
+.gold-rule {
+  width: 96px;
+  height: 4px;
+  border: 0;
+  border-radius: 999px;
+  margin: 0.8rem auto 0;
+  background: linear-gradient(90deg, #ab762b, #ebb870);
+}
+
+.author-grid,
+.book-grid {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+}
+
+.author-grid {
+  grid-template-columns: minmax(180px, 280px) 1fr;
+}
+
+.book-grid {
+  grid-template-columns: minmax(220px, 420px) 1fr;
+}
+
+.author-portrait {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid color-mix(in srgb, var(--wine) 28%, transparent);
+}
+
+.book-photo {
+  width: 100%;
+  border-radius: var(--radius);
+  object-fit: cover;
+  max-height: 480px;
+}
+
+.pull-quote {
+  margin: 0;
+  border-left: 4px solid var(--wine);
+  background: var(--surface-2);
+  padding: 0.9rem 1.1rem;
+  border-radius: 0 12px 12px 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: 0.03em;
+  color: var(--wine);
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.6rem;
+}
+
+.gallery-grid button {
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 1;
+}
+
+.gallery-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(0, 0, 0, 0.92);
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.lightbox img {
+  max-width: min(100%, 960px);
+  max-height: 82vh;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: #fff;
+}
+
+@media (max-width: 520px) {
+  .brand span {
+    font-size: 1.15rem;
+    letter-spacing: 0.05em;
   }
 }
 
-.hero-art {
-  position: relative;
-  aspect-ratio: 1;
-  max-width: 420px;
-  width: 100%;
-  justify-self: center;
+@media (max-width: 800px) {
+  .brand-tiles,
+  .author-grid,
+  .book-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .author-portrait {
+    max-width: 260px;
+    margin: 0 auto;
+  }
 }
 
 .principle {
@@ -915,15 +1161,11 @@ details.faq p {
 
   .bottom-nav a.pause-tab .pill {
     background: var(--indigo);
-    color: #fff;
+    color: var(--on-accent);
     border-radius: 999px;
     padding: 6px 14px;
     display: grid;
     place-items: center;
-  }
-
-  :root[data-theme='dark'] .bottom-nav a.pause-tab .pill {
-    color: #14122b;
   }
 
   .pause-fab {
@@ -1031,7 +1273,7 @@ details.faq p {
 .timer-display {
   font-size: 3.5rem;
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 400;
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
@@ -1055,12 +1297,8 @@ details.faq p {
 .bubble.user {
   align-self: flex-end;
   background: var(--indigo);
-  color: #fff;
+  color: var(--on-accent);
   border-bottom-right-radius: 6px;
-}
-
-:root[data-theme='dark'] .bubble.user {
-  color: #14122b;
 }
 
 .bubble.assistant {

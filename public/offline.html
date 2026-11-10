@@ -3,26 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#FAFAFC" />
+    <meta name="theme-color" content="#F9F7F5" />
     <title>Sin conexión · Amor Tóxico</title>
     <style>
+      @font-face { font-family: 'Bebas Neue'; src: url('/fonts/bebas-neue-latin.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+      @font-face { font-family: 'Open Sans'; src: url('/fonts/open-sans-latin.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
       :root { color-scheme: light dark; }
       body {
         margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 1.5rem;
-        font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-        background: radial-gradient(700px 360px at 80% -10%, #EDEBFF, transparent 70%), #FAFAFC; color: #202338;
+        font-family: 'Open Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
+        background: linear-gradient(180deg, #F1EBE4, #F9F7F5); color: #38332E;
       }
       main { max-width: 420px; text-align: center; }
-      h1 { font-family: 'Iowan Old Style', Palatino, Georgia, serif; font-weight: 600; font-size: 1.9rem; margin: 1.25rem 0 0.5rem; }
-      p { color: #667085; line-height: 1.6; }
-      .card { background: #fff; border: 1px solid #E6E5EF; border-radius: 20px; padding: 1.25rem; margin-top: 1.5rem; text-align: left; }
-      .card strong { color: #202338; }
-      a.btn, button { display: inline-block; margin-top: 1.25rem; background: #6255D9; color: #fff; border: 0; border-radius: 999px; padding: 0.85rem 1.4rem; font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; }
+      h1 { font-family: 'Bebas Neue', 'Arial Narrow', sans-serif; font-weight: 400; letter-spacing: 0.04em; font-size: 2.2rem; margin: 1.25rem 0 0.5rem; }
+      p { color: #6B625A; line-height: 1.6; }
+      .card { background: #fff; border: 1px solid #E4E0DD; border-radius: 20px; padding: 1.25rem; margin-top: 1.5rem; text-align: left; }
+      .card strong { color: #38332E; }
+      a.btn, button { display: inline-block; margin-top: 1.25rem; background: #6E3543; color: #F9F7F5; border: 0; border-radius: 999px; padding: 0.85rem 1.4rem; font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; }
       @media (prefers-color-scheme: dark) {
-        body { background: #12131C; color: #ECEAF6; }
-        .card { background: #1B1D2A; border-color: #2D3045; }
-        .card strong { color: #ECEAF6; }
-        p { color: #A9ADC2; }
+        body { background: #151413; color: #F8F5F1; }
+        .card { background: #211C1A; border-color: #3C3530; }
+        .card strong { color: #F8F5F1; }
+        p { color: #D7CBBF; }
+        a.btn, button { background: #F0C9D2; color: #151413; }
       }
     </style>
   </head>

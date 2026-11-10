@@ -76,12 +76,12 @@ function layout(title: string, paragraphs: string[], action?: { label: string; u
   const footer =
     'Amor Tóxico es un espacio de acompañamiento y educación emocional. No es terapia. Si estás en peligro, llama al número de emergencias de tu país.';
   const text = [title, '', ...paragraphs, ...(action ? ['', `${action.label}: ${action.url}`] : []), '', '—', footer].join('\n');
-  const html = `<!doctype html><html lang="es"><body style="margin:0;background:#FAFAFC;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#22223a">
+  const html = `<!doctype html><html lang="es"><body style="margin:0;background:#F9F7F5;font-family:Georgia,'Open Sans',sans-serif;color:#38332E">
 <div style="max-width:520px;margin:0 auto;padding:32px 24px">
 <h1 style="font-size:22px;font-weight:600;margin:0 0 16px">${escapeHtml(title)}</h1>
 ${paragraphs.map((p) => `<p style="font-size:16px;line-height:1.6;margin:0 0 14px">${escapeHtml(p)}</p>`).join('\n')}
-${action ? `<p style="margin:24px 0"><a href="${escapeHtml(action.url)}" style="background:#6b5ca5;color:#fff;text-decoration:none;padding:12px 20px;border-radius:999px;display:inline-block;font-weight:600">${escapeHtml(action.label)}</a></p><p style="font-size:13px;color:#6b6b80;word-break:break-all">${escapeHtml(action.url)}</p>` : ''}
-<hr style="border:0;border-top:1px solid #e6e6ef;margin:28px 0 16px"><p style="font-size:12px;color:#6b6b80;line-height:1.5">${escapeHtml(footer)}</p>
+${action ? `<p style="margin:24px 0"><a href="${escapeHtml(action.url)}" style="background:#6E3543;color:#F9F7F5;text-decoration:none;padding:12px 20px;border-radius:999px;display:inline-block;font-weight:600">${escapeHtml(action.label)}</a></p><p style="font-size:13px;color:#6B625A;word-break:break-all">${escapeHtml(action.url)}</p>` : ''}
+<hr style="border:0;border-top:1px solid #E4E0DD;margin:28px 0 16px"><p style="font-size:12px;color:#6B625A;line-height:1.5">${escapeHtml(footer)}</p>
 </div></body></html>`;
   return { text, html };
 }

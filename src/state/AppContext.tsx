@@ -73,7 +73,7 @@ function applyTheme(settings: Settings) {
   const theme = settings.theme === 'system' ? (prefersDark ? 'dark' : 'light') : settings.theme;
   root.dataset.theme = theme;
   root.dataset.motion = settings.reducedMotion ? 'reduced' : 'full';
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#12131c' : '#FAFAFC');
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#151413' : '#F9F7F5');
 }
 
 function mergeSettings(s: Partial<Settings> | undefined): Settings {

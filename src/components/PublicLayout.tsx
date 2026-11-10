@@ -34,8 +34,8 @@ export function PublicLayout() {
                 Entrar
               </NavLink>
             )}
-            <Link to={inApp ? '/app' : '/bienvenida'} className="btn btn-primary btn-sm" style={{ color: undefined }}>
-              {inApp ? 'Mi espacio' : 'Comenzar'}
+            <Link to={inApp ? '/app' : '/bienvenida'} className="btn btn-primary btn-sm">
+              {inApp ? 'Mi espacio' : 'Comenzar mi proceso'}
             </Link>
           </nav>
         </div>

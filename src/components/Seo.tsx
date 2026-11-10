@@ -15,7 +15,7 @@ export interface SeoProps {
 
 export const DEFAULT_DESCRIPTION =
   'Un espacio de acompañamiento para comprender lo que sientes después de una relación que te hizo daño, manejar los impulsos y reconstruir tu vida a tu ritmo. Inspirado en el libro Amor Tóxico de Laura Rojas.';
-const DEFAULT_IMAGE = '/icons/icon-512.png';
+const DEFAULT_IMAGE = '/brand/og-image.jpg';
 
 /** Collects head tags during prerendering (server side). */
 export const HeadContext = createContext<{ set(p: SeoProps): void } | null>(null);

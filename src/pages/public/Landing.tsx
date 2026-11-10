@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, type IconName } from '../../components/Icon';
 import { LeadForm } from '../../components/LeadForm';
 import { BLOG_POSTS } from '../../content/blog';
+import { BRAND, GALLERY, REELS } from '../../content/brand';
 import { BRAIN_TOPICS } from '../../content/brain';
 import { AUTHOR, BOOK, LINKS } from '../../content/links';
 import { CENTRAL_PRINCIPLE } from '../../content/messages';
@@ -9,31 +11,6 @@ import { PILLARS } from '../../content/program';
 import { useApp } from '../../state/AppContext';
 import { BOOK_LD, ORGANIZATION_LD, Seo, WEBSITE_LD, faqLd } from '../../components/Seo';
 import { ALWAYS_FREE } from '../../../shared/plans';
-
-function HeroArt() {
-  return (
-    <svg className="hero-art" viewBox="0 0 400 400" role="img" aria-label="Ilustración abstracta: un camino que vuelve a un círculo">
-      <defs>
-        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#EDEBFF" />
-          <stop offset="1" stopColor="#EAF3FF" />
-        </linearGradient>
-      </defs>
-      <circle cx="200" cy="200" r="170" fill="url(#g1)" />
-      <circle cx="270" cy="120" r="46" fill="#BCE9D5" opacity="0.9" />
-      <circle cx="120" cy="290" r="30" fill="#F4A5A6" opacity="0.85" />
-      <path d="M90 300 C 140 220, 160 260, 200 200 S 260 120, 300 150" fill="none" stroke="#6255D9" strokeWidth="6" strokeLinecap="round" strokeDasharray="2 14" />
-      <path
-        d="M200 262c-26-16-44-33-44-53 0-14 11-25 24-25 8 0 15 4 20 11 5-7 12-11 20-11 13 0 24 11 24 25 0 13-7 24-18 35"
-        fill="none"
-        stroke="#6255D9"
-        strokeWidth="7"
-        strokeLinecap="round"
-      />
-      <circle cx="232" cy="255" r="8" fill="#F4A5A6" />
-    </svg>
-  );
-}
 
 const HOW: { title: string; text: string }[] = [
   { title: 'Cuéntanos un poco de ti', text: 'Unas preguntas breves, una por pantalla. Puedes saltarte las que prefieras. Nunca te pediremos relatar lo que te dolió.' },
@@ -69,30 +46,67 @@ const FAQ: { q: string; a: string }[] = [
 export function Landing() {
   const { settings } = useApp();
   const startTo = settings.onboardingComplete ? '/app' : '/bienvenida';
+  const [photo, setPhoto] = useState<number | null>(null);
+  useEffect(() => {
+    if (photo === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setPhoto(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [photo]);
   return (
     <>
-      <Seo path="/" jsonLd={[ORGANIZATION_LD, WEBSITE_LD, BOOK_LD, faqLd(FAQ)]} />
+      <Seo path="/" image={BRAND.og} jsonLd={[ORGANIZATION_LD, WEBSITE_LD, BOOK_LD, faqLd(FAQ)]} />
       <section className="hero">
-        <div className="container hero-grid">
-          <div className="fade-in">
-            <span className="eyebrow">Acompañamiento emocional</span>
-            <h1>Volver a ti también es una forma de sanar.</h1>
-            <p className="lead">
-              Comprende lo que estás sintiendo, aprende a manejar los impulsos y empieza a reconstruir tu vida, a tu propio ritmo.
-            </p>
-            <div className="row" style={{ marginTop: '1.75rem' }}>
-              <Link to={startTo} className="btn btn-primary">
-                Comenzar mi proceso <Icon name="next" size={18} />
-              </Link>
-              <a href="#libro" className="btn btn-outline">
-                Conocer el libro de Laura Rojas
-              </a>
-            </div>
-            <p className="small muted" style={{ marginTop: '1.25rem' }}>
-              Acompañamiento y educación. No es terapia ni atención médica automatizada.
-            </p>
+        <div className="brand-reels" aria-label="Reels de Instagram">
+          {REELS.map((reel) => (
+            <a key={reel.code} href={`https://www.instagram.com/reel/${reel.code}/`} target="_blank" rel="noreferrer">
+              <img src={reel.src} alt="Reel de @lamortoxico" width={148} height={262} />
+            </a>
+          ))}
+        </div>
+        <div className="container hero-copy fade-in">
+          <img className="brand-wordmark" src={BRAND.wordmark} alt="Amor Tóxico" width={520} height={203} />
+          <h1>El amor no debería doler.</h1>
+          <p className="lead">Sanar nuestros traumas y construir mejores relaciones es posible. Yo te ayudo.</p>
+          <p className="lead">
+            Aquí puedes identificar patrones dañinos, soltar el dolor y recuperar tu identidad. Cuando quieras ir más adentro, la plataforma
+            te acompaña con el recorrido del libro, la pausa y un espacio privado.
+          </p>
+          <div className="row" style={{ marginTop: '1.75rem' }}>
+            <Link to={startTo} className="btn btn-primary">
+              Comenzar mi proceso <Icon name="next" size={18} />
+            </Link>
+            <a href="#libro" className="btn btn-outline">
+              Conocer el libro de Laura Rojas
+            </a>
           </div>
-          <HeroArt />
+          <div className="brand-tiles">
+            <a className="brand-tile tile-amazon" href={LINKS.book} target="_blank" rel="noreferrer">
+              <Icon name="book" />
+              Comprar en Amazon
+            </a>
+            <Link className="brand-tile tile-test" to="/test">
+              <Icon name="heart" />
+              ¿Tienes un amor tóxico?
+            </Link>
+            <a className="brand-tile tile-whatsapp" href={LINKS.community} target="_blank" rel="noreferrer">
+              <Icon name="message" />
+              Únete a la comunidad
+            </a>
+            <Link className="brand-tile tile-guide" to="/guia-72-horas">
+              <Icon name="book" />
+              Guía: 72 horas post-ruptura
+            </Link>
+            <a className="brand-tile tile-ebook" href="#ebook">
+              <Icon name="download" />
+              Descarga el eBook gratis
+            </a>
+          </div>
+          <p className="small muted" style={{ marginTop: '1.25rem' }}>
+            Acompañamiento y educación. No es terapia ni atención médica automatizada.
+          </p>
         </div>
       </section>
 
@@ -227,13 +241,8 @@ export function Landing() {
       </section>
 
       <section className="section alt" id="libro">
-        <div className="container split" style={{ alignItems: 'center', gap: '2.5rem' }}>
-          <div className="card tint-lavanda" style={{ aspectRatio: '3 / 4', maxWidth: 300, justifySelf: 'center', width: '100%', display: 'grid', placeItems: 'center', textAlign: 'center' }}>
-            <div>
-              <p className="eyebrow">{AUTHOR.name}</p>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: '2.2rem', fontWeight: 600, margin: 0 }}>{BOOK.title}</p>
-            </div>
-          </div>
+        <div className="container book-grid">
+          <img className="book-photo" src={BRAND.bookScene} alt="Laura Rojas en la FIL Guadalajara, con el libro Amor Tóxico sobre la mesa" />
           <div>
             <span className="eyebrow">El libro</span>
             <h2>
@@ -255,6 +264,60 @@ export function Landing() {
           </div>
         </div>
       </section>
+
+      <section className="section" id="autora">
+        <div className="container">
+          <div className="section-head" style={{ textAlign: 'center', marginLeft: 'auto', marginRight: 'auto' }}>
+            <h2>Sobre la autora</h2>
+            <div className="gold-rule" />
+          </div>
+          <div className="author-grid">
+            <img className="author-portrait" src={BRAND.author} alt="Laura Rojas, autora de Amor Tóxico" />
+            <div className="stack">
+              <h3>{AUTHOR.name}</h3>
+              <p>
+                {AUTHOR.name} es escritora y conferencista especializada en relaciones humanas y sanación emocional. Con su libro y su
+                presencia en redes ha creado una comunidad donde las personas encuentran comprensión y herramientas para liberarse del dolor
+                y reencontrarse consigo mismas.
+              </p>
+              <p className="pull-quote">“Mi misión es ayudarte a reconocer tu valor y recuperar tu libertad emocional.”</p>
+              <div className="row">
+                <a className="btn btn-primary" href={LINKS.instagram} target="_blank" rel="noreferrer">
+                  <Icon name="instagram" size={18} /> Sígueme en Instagram
+                </a>
+                <a className="btn btn-outline" href={LINKS.youtube} target="_blank" rel="noreferrer">
+                  <Icon name="youtube" size={18} /> Canal de YouTube
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section alt" id="galeria">
+        <div className="container">
+          <div className="section-head" style={{ textAlign: 'center', marginLeft: 'auto', marginRight: 'auto' }}>
+            <h2>Galería</h2>
+            <p className="muted">Momentos de presentaciones, firmas de libros y eventos de Amor Tóxico.</p>
+            <div className="gold-rule" />
+          </div>
+          <div className="gallery-grid">
+            {GALLERY.map((item, index) => (
+              <button key={item.src} type="button" onClick={() => setPhoto(index)}>
+                <img src={item.src} alt={item.alt} />
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+      {photo !== null && (
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label={GALLERY[photo].alt} onClick={() => setPhoto(null)}>
+          <button type="button" className="icon-btn lightbox-close" aria-label="Cerrar galería" onClick={() => setPhoto(null)}>
+            <Icon name="close" />
+          </button>
+          <img src={GALLERY[photo].src} alt={GALLERY[photo].alt} onClick={(e) => e.stopPropagation()} />
+        </div>
+      )}
 
       <section className="section" id="test">
         <div className="container split" style={{ gap: '1.25rem' }}>
@@ -287,7 +350,10 @@ export function Landing() {
             <Link to="/blog">Ver todos</Link>
           </div>
           <div className="grid">
-            {BLOG_POSTS.slice(0, 3).map((p) => (
+            {['te-convertiste-en-otra-persona', 'como-identificar-relacion-toxica', 'contacto-cero-guia-completa', 'amor-propio-despues-relacion-toxica']
+              .map((slug) => BLOG_POSTS.find((p) => p.slug === slug))
+              .filter((p): p is (typeof BLOG_POSTS)[number] => Boolean(p))
+              .map((p) => (
               <Link key={p.slug} to={`/blog/${p.slug}`} className="card card-link">
                 <span className="badge">{p.category}</span>
                 <h3 style={{ marginTop: '0.75rem' }}>{p.title}</h3>
@@ -300,7 +366,7 @@ export function Landing() {
 
       <section className="section" id="comunidad">
         <div className="container split" style={{ gap: '1.25rem' }}>
-          <div className="card stack">
+          <div className="card stack" id="ebook">
             <span className="eyebrow">eBook gratuito</span>
             <h2>Recibe el eBook</h2>
             <p className="muted">Déjanos tu nombre y correo y te lo enviaremos.</p>
