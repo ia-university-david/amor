@@ -1,6 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { AppLayout, RequireProfile } from './components/AppLayout';
+import { AppLayout } from './components/AppLayout';
 import { PublicLayout } from './components/PublicLayout';
 import { Landing } from './pages/public/Landing';
 import { BlogIndex, BlogPostPage } from './pages/public/Blog';
@@ -81,26 +81,12 @@ export function App() {
           <Route path="camino/modulo/:id" element={<ModulePage />} />
           <Route path="camino/ejercicio/:id" element={<ExercisePage />} />
           <Route path="pausa" element={<Pausa />} />
-          <Route
-            path="espacio"
-            element={
-              <RequireProfile>
-                <Espacio />
-              </RequireProfile>
-            }
-          />
+          <Route path="espacio" element={<Espacio />} />
           <Route path="perfil" element={<Perfil />} />
           <Route path="limites" element={<Limites />} />
           <Route path="dificil" element={<HoyDificil />} />
           <Route path="checkin" element={<CheckIn />} />
-          <Route
-            path="asistente"
-            element={
-              <RequireProfile>
-                <Asistente />
-              </RequireProfile>
-            }
-          />
+          <Route path="asistente" element={<Asistente />} />
           <Route path="cerebro" element={<Cerebro />} />
           <Route path="cerebro/:id" element={<CerebroTema />} />
           <Route path="biblioteca" element={<Biblioteca />} />

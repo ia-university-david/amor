@@ -27,7 +27,9 @@ export function BlogIndex() {
             <span className="badge">{p.category}</span>
             <h2 style={{ fontSize: '1.2rem', marginTop: '0.75rem' }}>{p.title}</h2>
             <p className="small muted" style={{ margin: 0 }}>
-              {p.readingMinutes ? `${p.readingMinutes} min de lectura` : 'Lectura breve'} · {p.author}
+              {p.status === 'pendiente-migracion' || !p.body.trim()
+                ? 'El texto completo se publicará cuando esté autorizado'
+                : `${p.readingMinutes ? `${p.readingMinutes} min de lectura` : 'Lectura breve'} · ${p.author}`}
             </p>
           </Link>
         ))}
@@ -82,8 +84,8 @@ export function BlogPostPage() {
         <div className="stack">
           <p className="muted">{post.summary}</p>
           <Notice icon="clock">
-            <strong>Contenido pendiente de migración.</strong> El texto completo de este artículo se está trasladando desde el sitio anterior y
-            aparecerá aquí tal como fue publicado.
+            Este artículo de Laura Rojas conserva su título y su dirección. El texto completo se publicará aquí cuando ella lo autorice. Mientras
+            tanto puedes hacer el test o empezar la pausa si lo necesitas ahora.
           </Notice>
         </div>
       ) : (
@@ -93,7 +95,7 @@ export function BlogPostPage() {
         </>
       )}
       <div className="row" style={{ marginTop: '2rem' }}>
-        <Link to="/bienvenida" className="btn btn-primary">
+        <Link to="/bienvenida?paso=bienvenida" className="btn btn-primary">
           Comenzar mi proceso
         </Link>
         <Link to="/test" className="btn btn-outline">

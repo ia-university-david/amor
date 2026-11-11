@@ -34,7 +34,7 @@ export function PublicLayout() {
                 Entrar
               </NavLink>
             )}
-            <Link to={inApp ? '/app' : '/bienvenida'} className="btn btn-primary btn-sm">
+            <Link to={inApp ? '/app' : '/bienvenida?paso=bienvenida'} className="btn btn-primary btn-sm">
               {inApp ? 'Mi espacio' : 'Comenzar mi proceso'}
             </Link>
           </nav>

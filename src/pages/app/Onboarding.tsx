@@ -38,6 +38,22 @@ type StepId =
   | 'privacidad'
   | 'plan';
 
+const STEP_TITLES: Record<StepId, string> = {
+  bienvenida: 'Este espacio es para ti',
+  registro: 'Crea tu cuenta',
+  identidad: 'Cómo te identificas',
+  situacion: 'Tu situación',
+  duracion: 'Cuánto tiempo estuvieron juntos',
+  ruptura: 'Cuándo terminó',
+  circunstancias: 'Qué ocurrió',
+  contacto: 'El contacto ahora',
+  emociones: 'Qué estás sintiendo',
+  dificultad: 'Lo que más te cuesta',
+  necesidad: 'Qué quieres conseguir',
+  privacidad: 'Tu privacidad',
+  plan: 'Tu plan inicial',
+};
+
 const ALL_STEPS: StepId[] = [
   'bienvenida', 'registro', 'identidad', 'situacion', 'duracion', 'ruptura', 'circunstancias',
   'contacto', 'emociones', 'dificultad', 'necesidad', 'privacidad', 'plan',
@@ -102,6 +118,11 @@ export default function Onboarding() {
   const back = () => goTo(steps[Math.max(0, index - 1)]);
 
   const set = <K extends keyof OnboardingAnswers>(key: K, value: OnboardingAnswers[K]) => save({ ...answers, [key]: value });
+
+  useEffect(() => {
+    if (!loaded) return;
+    document.title = `${STEP_TITLES[step]} · Amor Tóxico`;
+  }, [loaded, step]);
 
   if (!loaded) return null;
 
@@ -181,6 +202,17 @@ export default function Onboarding() {
               await next();
             }}
           />
+          <button
+            type="button"
+            className="btn btn-outline btn-block"
+            onClick={async () => {
+              await updateSettings({ guest: true });
+              navigate('/app');
+            }}
+          >
+            Explorar primero
+          </button>
+          <p className="small muted">Puedes mirar la app sin crear una cuenta. Lo que escribas se queda en este dispositivo.</p>
         </div>
       );
 

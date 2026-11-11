@@ -35,7 +35,7 @@ export function Guide72() {
       <div className="card tint-lavanda" style={{ marginTop: '2rem' }}>
         <h3>¿Quieres hacerlo acompañado?</h3>
         <p>La app te ofrece la pausa, la respiración guiada y un espacio privado para escribir, incluso sin conexión.</p>
-        <Link to="/bienvenida" className="btn btn-primary">
+        <Link to="/bienvenida?paso=bienvenida" className="btn btn-primary">
           Comenzar mi proceso
         </Link>
       </div>

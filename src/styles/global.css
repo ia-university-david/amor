@@ -1048,12 +1048,12 @@ details.faq p {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 0.35rem;
 }
 
-.public-footer nav a {
-  display: flex;
-  align-items: center;
-  max-width: 100%;
+.public-footer nav.stack a {
+  display: block;
+  margin-top: 0;
 }
 
 @media (max-width: 800px) {

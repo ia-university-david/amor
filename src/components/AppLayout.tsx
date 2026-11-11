@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link, NavLink, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useApp } from '../state/AppContext';
 import { useOnline } from '../lib/pwa';
@@ -11,6 +12,23 @@ const MAIN_NAV: { to: string; label: string; icon: IconName; end?: boolean }[] =
   { to: '/app/pausa', label: 'Pausa', icon: 'pause' },
   { to: '/app/espacio', label: 'Mi Espacio', icon: 'space' },
   { to: '/app/perfil', label: 'Perfil', icon: 'user' },
+];
+
+const PAGE_TITLES: { prefix: string; title: string; exact?: boolean }[] = [
+  { prefix: '/app/pausa', title: 'Necesito una pausa' },
+  { prefix: '/app/camino', title: 'Mi Camino' },
+  { prefix: '/app/espacio', title: 'Mi Espacio' },
+  { prefix: '/app/perfil', title: 'Perfil' },
+  { prefix: '/app/asistente', title: 'Tu espacio para hablar' },
+  { prefix: '/app/avances', title: 'Mis pequeños avances' },
+  { prefix: '/app/comunidad', title: 'Comunidad' },
+  { prefix: '/app/cerebro', title: 'Tu cerebro después de una ruptura' },
+  { prefix: '/app/limites', title: 'Contacto y límites' },
+  { prefix: '/app/dificil', title: 'Hoy fue difícil' },
+  { prefix: '/app/checkin', title: 'Cómo estás hoy' },
+  { prefix: '/app/biblioteca', title: 'Biblioteca' },
+  { prefix: '/app/planes', title: 'Planes' },
+  { prefix: '/app', title: 'Inicio', exact: true },
 ];
 
 const SECONDARY_NAV: { to: string; label: string; icon: IconName }[] = [
@@ -37,6 +55,11 @@ export function AppLayout() {
     );
   }
   const onPause = location.pathname.startsWith('/app/pausa');
+
+  useEffect(() => {
+    const match = PAGE_TITLES.find((p) => (p.exact ? location.pathname === p.prefix : location.pathname.startsWith(p.prefix)));
+    document.title = `${match?.title ?? 'Amor Tóxico'} · Amor Tóxico`;
+  }, [location.pathname]);
   // The pause and the educational module must work even before onboarding:
   // someone may open them straight from the home-screen shortcut in a hard moment.
   const alwaysOpen =
@@ -44,7 +67,7 @@ export function AppLayout() {
     location.pathname.startsWith('/app/cerebro') ||
     location.pathname.startsWith('/app/checkin') ||
     location.pathname.startsWith('/app/dificil');
-  if (!settings.onboardingComplete && !settings.guest && !alwaysOpen) return <Navigate to="/bienvenida" replace />;
+  if (!settings.onboardingComplete && !settings.guest && !alwaysOpen) return <Navigate to="/bienvenida?paso=bienvenida" replace />;
   const exploring = !settings.onboardingComplete;
 
   return (
@@ -130,24 +153,7 @@ export function AppLayout() {
           Sin conexión. Tus herramientas siguen disponibles.
         </div>
       )}
-      <InstallPrompt />
-    </div>
-  );
-}
-
-export function RequireProfile({ children }: { children: React.ReactNode }) {
-  const { settings } = useApp();
-  if (settings.onboardingComplete) return <>{children}</>;
-  return (
-    <div className="card empty">
-      <span className="card-icon">
-        <Icon name="lock" />
-      </span>
-      <h2>Esta sección necesita tu perfil</h2>
-      <p>Para guardar tu diario, mensajes y conversaciones de forma privada y cifrada, crea primero tu perfil. Solo toma unos minutos.</p>
-      <Link to="/bienvenida?paso=registro" className="btn btn-primary">
-        Crear mi perfil
-      </Link>
+      {!onPause && <InstallPrompt />}
     </div>
   );
 }

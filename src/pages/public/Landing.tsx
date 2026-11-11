@@ -45,7 +45,7 @@ const FAQ: { q: string; a: string }[] = [
 
 export function Landing() {
   const { settings } = useApp();
-  const startTo = settings.onboardingComplete ? '/app' : '/bienvenida';
+  const startTo = settings.onboardingComplete ? '/app' : '/bienvenida?paso=bienvenida';
   const [photo, setPhoto] = useState<number | null>(null);
   useEffect(() => {
     if (photo === null) return;
@@ -350,9 +350,8 @@ export function Landing() {
             <Link to="/blog">Ver todos</Link>
           </div>
           <div className="grid">
-            {['te-convertiste-en-otra-persona', 'como-identificar-relacion-toxica', 'contacto-cero-guia-completa', 'amor-propio-despues-relacion-toxica']
-              .map((slug) => BLOG_POSTS.find((p) => p.slug === slug))
-              .filter((p): p is (typeof BLOG_POSTS)[number] => Boolean(p))
+            {BLOG_POSTS.filter((p) => p.body.trim() && p.status !== 'pendiente-migracion')
+              .slice(0, 3)
               .map((p) => (
               <Link key={p.slug} to={`/blog/${p.slug}`} className="card card-link">
                 <span className="badge">{p.category}</span>
@@ -361,6 +360,9 @@ export function Landing() {
               </Link>
             ))}
           </div>
+          <p className="small muted" style={{ marginTop: '1rem' }}>
+            Los artículos de Laura Rojas conservan su dirección. El texto completo se publicará aquí cuando esté autorizado, sin cambiar lo que ya escribió.
+          </p>
         </div>
       </section>
 

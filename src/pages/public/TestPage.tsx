@@ -53,7 +53,7 @@ export function TestPage() {
           {result.disclaimer}
         </p>
         <div className="flow-actions">
-          <Link to="/bienvenida" className="btn btn-primary">
+          <Link to="/bienvenida?paso=bienvenida" className="btn btn-primary">
             Comenzar mi proceso
           </Link>
           <button

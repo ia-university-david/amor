@@ -189,16 +189,7 @@ export function AuthForm({ initialMode = 'registro', onDone, compact }: { initia
             <a key={p} className="btn btn-outline btn-block" href={auth.oauthUrl(p)}>
               Continuar con {p === 'google' ? 'Google' : 'Apple'}
             </a>
-          ) : (
-            <button key={p} type="button" className="btn btn-outline btn-block" disabled aria-describedby="sso-note">
-              Continuar con {p === 'google' ? 'Google' : 'Apple'}
-            </button>
-          ),
-        )}
-        {providers && (!providers.google || !providers.apple) && (
-          <p id="sso-note" className="small muted" style={{ textAlign: 'center', margin: 0 }}>
-            {!providers.google && !providers.apple ? 'Google y Apple' : !providers.google ? 'Google' : 'Apple'} estará disponible cuando se configure en el servidor.
-          </p>
+          ) : null,
         )}
         {server.devMailbox && (
           <p className="small muted" style={{ textAlign: 'center', margin: 0 }}>

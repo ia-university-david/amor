@@ -211,7 +211,8 @@ export function WriteUnsent({ onSaved }: { onSaved?: () => void }) {
       <div className="notice" role="status">
         <Icon name="lock" size={20} />
         <div>
-          Guardado y cifrado en tu dispositivo. No se envió a nadie. Puedes releerlo en <Link to="/app/espacio?seccion=sin-enviar">Mi Espacio</Link>.
+          Guardado y cifrado en este dispositivo. No se envió a nadie. Puedes releerlo ahora en{' '}
+          <Link to="/app/espacio?seccion=sin-enviar">Mi Espacio → Sin enviar</Link>, también si estás explorando sin cuenta.
         </div>
       </div>
     );
