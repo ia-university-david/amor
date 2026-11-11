@@ -62,6 +62,23 @@ const EnvSchema = z.object({
 
 export type Env = z.infer<typeof EnvSchema>;
 
+/** Public site. Both hosts must be allowed: www currently serves the same app. */
+export const PRODUCTION_WEB_ORIGINS = ['https://amortoxico.com', 'https://www.amortoxico.com'] as const;
+
+/** Vite (5173) and the API (8787), by name and by loopback. Only outside production. */
+export const DEV_LOCAL_ORIGINS = [
+  'http://localhost:5173',
+  'http://localhost:8787',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:8787',
+] as const;
+
+export function buildCorsOrigins(appOrigin: string, extra: string | undefined, isProd: boolean): string[] {
+  const fromEnv = extra?.split(',').map((s) => s.trim()).filter(Boolean) ?? [];
+  const locals = isProd ? [] : DEV_LOCAL_ORIGINS;
+  return [...new Set([appOrigin, ...PRODUCTION_WEB_ORIGINS, ...locals, ...fromEnv])];
+}
+
 export interface Config extends Env {
   isProd: boolean;
   corsOrigins: string[];
@@ -89,7 +106,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   }
   if (isProd && e.EMAIL_TRANSPORT === 'memory') throw new Error('EMAIL_TRANSPORT=memory no está permitido en producción.');
   const appOrigin = new URL(e.APP_URL).origin;
-  const corsOrigins = [appOrigin, ...(e.CORS_ORIGINS?.split(',').map((s) => s.trim()).filter(Boolean) ?? [])];
+  const corsOrigins = buildCorsOrigins(appOrigin, e.CORS_ORIGINS, isProd);
   return {
     ...e,
     isProd,

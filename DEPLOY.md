@@ -52,6 +52,12 @@ npm start
 
 Generar secretos: `npm run secrets` y `npm run vapid`. Dar un rol a mano: `npm run role`.
 
+## Dominio canónico
+
+La dirección pública es `https://amortoxico.com`. El proceso Node responde **301** a esa dirección cuando la petición de una página llega con host `www.amortoxico.com` (conserva ruta y query). La API acepta los dos orígenes, así que un formulario abierto en `www` puede guardar aunque la página aún no haya redirigido.
+
+En Hostinger, si LiteSpeed sirve los HTML y Node solo recibe `/api`, esa redirección no afecta a las páginas. En ese caso, en hPanel añade **una** redirección 301 de `https://www.amortoxico.com` a `https://amortoxico.com`, conservando ruta y query. No cambies los registros DNS.
+
 ## Qué no hacer
 
 - No subir `.env`.

@@ -6,7 +6,7 @@ import { createDb, migrate } from './db';
 import { seedContent } from './db/seed';
 import { createLogger, type Logger } from './logger';
 import { RateLimiter } from './middleware/rateLimit';
-import { originCheck, requestLog, securityHeaders } from './middleware/security';
+import { canonicalHostRedirect, originCheck, requestLog, securityHeaders } from './middleware/security';
 import { loadSession } from './middleware/session';
 import { BillingService } from './services/billing';
 import { Vault } from './services/crypto';
@@ -61,6 +61,7 @@ export function createApp(deps: Deps, opts: { staticDir?: string } = {}) {
 
   app.use('*', requestLog(log));
   app.use('*', securityHeaders(config.isProd));
+  app.use('*', canonicalHostRedirect());
   app.use('/api/*', cors({ origin: config.corsOrigins, credentials: true, allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], maxAge: 600 }));
   app.use('/api/*', originCheck(config.corsOrigins, ['/api/billing/webhook', '/api/auth/oauth/apple/callback']));
   app.use('/api/*', loadSession(deps));

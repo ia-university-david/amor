@@ -40,6 +40,33 @@ export function securityHeaders(isProd: boolean): MiddlewareHandler<AppEnv> {
  * allowed Origin (browsers always send it on cross-site POST/PUT/DELETE).
  * Combined with SameSite=Lax cookies and JSON bodies.
  */
+export const CANONICAL_HOST = 'amortoxico.com';
+export const WWW_HOST = 'www.amortoxico.com';
+
+function hostnames(value: string | undefined): string[] {
+  return (value ?? '')
+    .split(',')
+    .map((part) => part.trim().toLowerCase().replace(/:\d+$/, ''))
+    .filter(Boolean);
+}
+
+/**
+ * Single canonical host. When this process serves the HTML, a request whose
+ * public host is www.amortoxico.com is redirected to https://amortoxico.com
+ * with the same path and query. /api is left alone: a 301 would turn POST
+ * into GET, and the www origin stays on the allowlist for that case.
+ */
+export function canonicalHostRedirect(): MiddlewareHandler<AppEnv> {
+  return async (c, next) => {
+    const path = c.req.path;
+    if (path === '/api' || path.startsWith('/api/')) return next();
+    const hosts = [...hostnames(c.req.header('x-forwarded-host')), ...hostnames(c.req.header('host'))];
+    if (!hosts.includes(WWW_HOST)) return next();
+    const url = new URL(c.req.url);
+    return c.redirect(`https://${CANONICAL_HOST}${url.pathname}${url.search}`, 301);
+  };
+}
+
 export function originCheck(allowed: string[], exempt: string[] = []): MiddlewareHandler<AppEnv> {
   return async (c, next) => {
     const method = c.req.method;
